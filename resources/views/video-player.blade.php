@@ -142,23 +142,48 @@
         const videoTitle = document.getElementById('videoTitle');
         let videoCompleted = false;
         let antiCheatDisabled = false;
+        let lastSavedSecond = -1;
+        let restoreAttempts = 0;
+        const maxRestoreAttempts = 10;
 
         // Fonctions de progression
         const saveProgress = () => {
             if (player && !videoCompleted) {
                 const progress = JSON.parse(localStorage.getItem(videoProgressKey) || '{}');
-                progress[videoFile] = player.currentTime;
+                const currentTime = Number(player.currentTime) || 0;
+                const existingTime = Number(progress[videoFile]) || 0;
+
+                // Garder la position la plus avancée pour éviter d'écraser par 0s selon le timing navigateur.
+                progress[videoFile] = Math.max(existingTime, currentTime);
                 localStorage.setItem(videoProgressKey, JSON.stringify(progress));
             }
         };
 
         const restoreProgress = () => {
             const progress = JSON.parse(localStorage.getItem(videoProgressKey) || '{}');
-            const savedTime = progress[videoFile];
-            if (savedTime && savedTime > 0 && player && player.duration > 0) {
-                player.currentTime = savedTime;
-                console.log(`Progression restaurée: ${videoFile} à ${savedTime.toFixed(2)}s / ${player.duration.toFixed(2)}s`);
+            const savedTime = Number(progress[videoFile]) || 0;
+
+            if (savedTime > 0 && player && Number.isFinite(player.duration) && player.duration > 0) {
+                const safeTarget = Math.min(savedTime, Math.max(0, player.duration - 0.25));
+                player.currentTime = safeTarget;
+                console.log(`Progression restaurée: ${videoFile} à ${safeTarget.toFixed(2)}s / ${player.duration.toFixed(2)}s`);
+                return true;
             }
+
+            return false;
+        };
+
+        const restoreProgressWithRetry = () => {
+            if (restoreProgress()) {
+                return;
+            }
+
+            if (restoreAttempts >= maxRestoreAttempts) {
+                return;
+            }
+
+            restoreAttempts += 1;
+            setTimeout(restoreProgressWithRetry, 250);
         };
 
         // Initialiser la vidéo
@@ -181,11 +206,11 @@
             }
 
             // Restaurer la progression via plusieurs événements pour plus de fiabilité
-            player.addEventListener('loadedmetadata', restoreProgress, { once: true });
-            player.addEventListener('canplay', restoreProgress, { once: true });
-            
+            player.addEventListener('loadedmetadata', restoreProgressWithRetry, { once: true });
+            player.addEventListener('canplay', restoreProgressWithRetry, { once: true });
+
             // Fallback: restaurer après un court délai
-            setTimeout(restoreProgress, 500);
+            setTimeout(restoreProgressWithRetry, 500);
         }
 
         const forcePause = () => {
@@ -210,6 +235,10 @@
             saveProgress();
         });
 
+        window.addEventListener('pagehide', () => {
+            saveProgress();
+        });
+
         window.addEventListener('blur', () => {
             if (!antiCheatDisabled) {
                 forcePause();
@@ -218,6 +247,14 @@
 
         // Sauvegarder la progression quand on appuie sur pause
         if (player) {
+            player.addEventListener('timeupdate', () => {
+                const second = Math.floor(player.currentTime || 0);
+                if (second !== lastSavedSecond) {
+                    lastSavedSecond = second;
+                    saveProgress();
+                }
+            });
+
             player.addEventListener('pause', () => {
                 saveProgress();
             });

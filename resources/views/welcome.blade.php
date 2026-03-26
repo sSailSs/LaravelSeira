@@ -294,7 +294,7 @@
                 <a class="btn btn-secondary" href="{{ url($apiPrefix) }}">API Entrypoint</a>
                 <a class="btn btn-secondary" href="{{ url($apiPrefix.'/docs.jsonopenapi') }}">OpenAPI JSON</a>
                 <a class="btn btn-secondary" href="{{ route('project.overview') }}">Project Overview</a>
-                <a class="btn btn-secondary" href="{{ route('video.list') }}">Test Video Cheat</a>
+                <a class="btn btn-secondary" href="{{ route('role.home') }}">Espace Test (site)</a>
             </div>
         </section>
 
