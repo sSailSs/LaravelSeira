@@ -23,12 +23,12 @@ class ModelValidationTest extends TestCase
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
-            'role' => 'student',
+            'role' => 'eleve',
         ]);
 
         $this->assertEquals('Test User', $user->name);
         $this->assertEquals('test@example.com', $user->email);
-        $this->assertEquals('student', $user->role);
+        $this->assertEquals('eleve', $user->role);
     }
 
     /**
@@ -40,7 +40,7 @@ class ModelValidationTest extends TestCase
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'secret123',
-            'role' => 'student',
+            'role' => 'eleve',
         ]);
 
         $array = $user->toArray();
@@ -53,7 +53,7 @@ class ModelValidationTest extends TestCase
      */
     public function test_school_class_requires_name(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
 
         $class = SchoolClass::create([
             'name' => 'Test Class', // name is required
@@ -85,7 +85,7 @@ class ModelValidationTest extends TestCase
      */
     public function test_school_class_fillable_attributes(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
 
         $class = SchoolClass::create([
             'name' => 'Test Class',
@@ -104,7 +104,7 @@ class ModelValidationTest extends TestCase
      */
     public function test_course_fillable_attributes(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
 
         $course = Course::create([
@@ -125,7 +125,7 @@ class ModelValidationTest extends TestCase
      */
     public function test_chapter_content_fillable_attributes(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -157,7 +157,7 @@ class ModelValidationTest extends TestCase
      */
     public function test_chapter_content_position_cast_to_integer(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -184,7 +184,7 @@ class ModelValidationTest extends TestCase
      */
     public function test_chapter_content_duration_cast_to_integer(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -211,8 +211,8 @@ class ModelValidationTest extends TestCase
      */
     public function test_user_content_progress_fillable_attributes(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -246,8 +246,8 @@ class ModelValidationTest extends TestCase
      */
     public function test_user_content_progress_is_completed_cast_to_boolean(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -279,8 +279,8 @@ class ModelValidationTest extends TestCase
      */
     public function test_user_content_progress_last_watched_at_cast_to_datetime(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,

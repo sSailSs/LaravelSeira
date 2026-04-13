@@ -17,9 +17,9 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_processor_syncs_students_on_create(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
-        $student1 = User::factory()->create(['role' => 'student']);
-        $student2 = User::factory()->create(['role' => 'student']);
+        $teacher = User::factory()->create(['role' => 'prof']);
+        $student1 = User::factory()->create(['role' => 'eleve']);
+        $student2 = User::factory()->create(['role' => 'eleve']);
 
         $payload = [
             'name' => 'Test Class',
@@ -44,10 +44,10 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_processor_replaces_students_on_update(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
-        $student1 = User::factory()->create(['role' => 'student']);
-        $student2 = User::factory()->create(['role' => 'student']);
-        $student3 = User::factory()->create(['role' => 'student']);
+        $teacher = User::factory()->create(['role' => 'prof']);
+        $student1 = User::factory()->create(['role' => 'eleve']);
+        $student2 = User::factory()->create(['role' => 'eleve']);
+        $student3 = User::factory()->create(['role' => 'eleve']);
 
         $class = SchoolClass::create([
             'name' => 'Test Class',
@@ -75,9 +75,9 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_processor_can_clear_all_students(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
-        $student1 = User::factory()->create(['role' => 'student']);
-        $student2 = User::factory()->create(['role' => 'student']);
+        $teacher = User::factory()->create(['role' => 'prof']);
+        $student1 = User::factory()->create(['role' => 'eleve']);
+        $student2 = User::factory()->create(['role' => 'eleve']);
 
         $class = SchoolClass::create([
             'name' => 'Test Class',
@@ -101,8 +101,8 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_processor_doesnt_persist_students_as_column(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
-        $student = User::factory()->create(['role' => 'student']);
+        $teacher = User::factory()->create(['role' => 'prof']);
+        $student = User::factory()->create(['role' => 'eleve']);
 
         $class = SchoolClass::create([
             'name' => 'Test Class',
@@ -122,10 +122,10 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_school_class_students_many_to_many(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
 
-        $students = User::factory()->count(3)->create(['role' => 'student']);
+        $students = User::factory()->count(3)->create(['role' => 'eleve']);
 
         foreach ($students as $student) {
             $class->students()->attach($student->id);
@@ -148,9 +148,9 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_pivot_table_has_timestamps(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
-        $student = User::factory()->create(['role' => 'student']);
+        $student = User::factory()->create(['role' => 'eleve']);
 
         $class->students()->attach($student->id);
 
@@ -168,20 +168,13 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_sync_updates_existing_relationships(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
 
-        $student1 = User::factory()->create(['role' => 'student']);
-        $student2 = User::factory()->create(['role' => 'student']);
+        $student1 = User::factory()->create(['role' => 'eleve']);
+        $student2 = User::factory()->create(['role' => 'eleve']);
 
         $class->students()->attach($student1->id);
-        $initialTimestamp = $class->students()
-            ->where('user_id', $student1->id)
-            ->first()
-            ->pivot->updated_at;
-
-        // Wait a bit to ensure timestamp changes
-        sleep(1);
 
         // Sync with the same student and a new one
         $class->students()->sync([$student1->id, $student2->id]);
@@ -197,7 +190,7 @@ class SchoolClassProcessorTest extends TestCase
      */
     public function test_create_class_without_students(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
 
         $class = SchoolClass::create([
             'name' => 'Test Class',

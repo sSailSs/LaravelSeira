@@ -21,7 +21,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_user_has_many_school_classes_as_teacher(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $classes = SchoolClass::factory()->count(3)->create(['teacher_id' => $teacher->id]);
 
         $this->assertCount(3, $teacher->classesAsTeacher);
@@ -33,8 +33,8 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_user_has_many_school_classes_as_student(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $classes = SchoolClass::factory()->count(3)->create(['teacher_id' => $teacher->id]);
 
         foreach ($classes as $class) {
@@ -50,7 +50,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_school_class_belongs_to_teacher(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
 
         $this->assertNotNull($class->teacher);
@@ -62,9 +62,9 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_school_class_has_many_students(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
-        $students = User::factory()->count(5)->create(['role' => 'student']);
+        $students = User::factory()->count(5)->create(['role' => 'eleve']);
 
         foreach ($students as $student) {
             $class->students()->attach($student);
@@ -78,7 +78,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_school_class_has_many_courses(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
 
         $class->courses()->createMany([
@@ -94,7 +94,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_course_belongs_to_school_class(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -110,7 +110,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_course_belongs_to_teacher(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -126,7 +126,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_course_has_many_chapters(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -146,7 +146,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_chapter_belongs_to_course(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -163,7 +163,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_chapter_has_many_contents(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -184,7 +184,7 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_chapter_content_belongs_to_chapter(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -202,9 +202,9 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_chapter_content_has_many_progress_records(): void
     {
-        $teacher = User::factory()->create(['role' => 'teacher']);
-        $student1 = User::factory()->create(['role' => 'student']);
-        $student2 = User::factory()->create(['role' => 'student']);
+        $teacher = User::factory()->create(['role' => 'prof']);
+        $student1 = User::factory()->create(['role' => 'eleve']);
+        $student2 = User::factory()->create(['role' => 'eleve']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -230,8 +230,8 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_user_content_progress_belongs_to_user(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -253,8 +253,8 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_user_content_progress_belongs_to_chapter_content(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
@@ -276,8 +276,8 @@ class ModelRelationshipsTest extends BaseTestCase
      */
     public function test_user_has_many_content_progress(): void
     {
-        $student = User::factory()->create(['role' => 'student']);
-        $teacher = User::factory()->create(['role' => 'teacher']);
+        $student = User::factory()->create(['role' => 'eleve']);
+        $teacher = User::factory()->create(['role' => 'prof']);
         $class = SchoolClass::factory()->create(['teacher_id' => $teacher->id]);
         $course = Course::factory()->create([
             'teacher_id' => $teacher->id,
