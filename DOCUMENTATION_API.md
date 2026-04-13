@@ -189,3 +189,21 @@ curl -X PATCH http://127.0.0.1:8000/api/user_content_progresses/1 \
 php artisan migrate:fresh --seed
 php artisan test
 ```
+
+## 11. Durcissement securite (configurable)
+
+Le projet inclut des options de securite API activables via `.env`:
+
+- `API_REQUIRE_AUTH=false` (defaut):
+  - `false`: API accessible sans middleware `auth` global
+  - `true`: middleware `auth` applique globalement a toutes les routes API Platform
+- `API_SWAGGER_UI_ENABLED=true` hors production par defaut:
+  - en production, la valeur par defaut est `false`
+  - definir explicitement `true` si vous souhaitez exposer Swagger UI
+
+Exemple `.env` pour un environnement plus strict:
+
+```dotenv
+API_REQUIRE_AUTH=true
+API_SWAGGER_UI_ENABLED=false
+```

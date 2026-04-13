@@ -16,7 +16,10 @@ use App\Policies\CoursePolicy;
 use App\Policies\SchoolClassPolicy;
 use App\Policies\UserContentProgressPolicy;
 use App\Policies\UserPolicy;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +37,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RateLimiter::for('api', function (Request $request): Limit {
+            return Limit::perMinute(60)->by((string) ($request->user()?->id ?? $request->ip()));
+        });
+
         Gate::policy(Book::class, BookPolicy::class);
         Gate::policy(User::class, UserPolicy::class);
         Gate::policy(SchoolClass::class, SchoolClassPolicy::class);

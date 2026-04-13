@@ -16,6 +16,13 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Symfony\Component\Serializer\NameConverter\SnakeCaseToCamelCaseNameConverter;
 
+$apiRequireAuth = filter_var((string) env('API_REQUIRE_AUTH', 'false'), FILTER_VALIDATE_BOOLEAN);
+$apiMiddleware = ['throttle:api'];
+
+if ($apiRequireAuth) {
+    $apiMiddleware[] = 'auth';
+}
+
 return [
     'title' => 'API Platform',
     'description' => 'My awesome API',
@@ -63,7 +70,7 @@ return [
         'pagination_items_per_page' => 30,
         'pagination_maximum_items_per_page' => 30,
         'route_prefix' => env('API_ROUTE_PREFIX', '/api'),
-        'middleware' => [],
+        'middleware' => $apiMiddleware,
     ],
 
     'pagination' => [
@@ -97,7 +104,8 @@ return [
     ],
 
     'swagger_ui' => [
-        'enabled' => true,
+        // Keep docs enabled in dev by default; allow disabling in production.
+        'enabled' => (bool) env('API_SWAGGER_UI_ENABLED', env('APP_ENV') !== 'production'),
         // 'apiKeys' => [
         //     'api' => [
         //         'name' => 'Authorization',
