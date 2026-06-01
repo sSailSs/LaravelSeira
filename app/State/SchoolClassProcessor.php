@@ -5,6 +5,7 @@ namespace App\State;
 use ApiPlatform\Laravel\Eloquent\State\PersistProcessor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
+use App\Events\UserEnrolledInClass;
 use App\Models\SchoolClass;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -29,17 +30,47 @@ class SchoolClassProcessor implements ProcessorInterface
 
         [$studentsProvided, $studentsInput] = $this->extractStudentsInput($data, $context);
 
+        // Get existing students before update for event tracking
+        $existingStudentIds = $data->id ? $data->students()->pluck('id')->toArray() : [];
+
         // Prevent API Platform from trying to persist students as a DB column.
         $this->clearTransientStudentsState($data);
 
         $persisted = $this->persistProcessor->process($data, $operation, $uriVariables, $context);
 
         if ($studentsProvided && $persisted instanceof SchoolClass) {
-            $persisted->students()->sync($this->normalizeStudentIds($studentsInput));
+            $newStudentIds = $this->normalizeStudentIds($studentsInput);
+            $persisted->students()->sync($newStudentIds);
             $persisted->load('students');
+
+            // Dispatch events for newly enrolled students
+            $this->dispatchEnrollmentEvents($persisted, $existingStudentIds, $newStudentIds);
         }
 
         return $persisted;
+    }
+
+    /**
+     * Dispatch UserEnrolledInClass events for newly added students.
+     *
+     * @param list<int> $existingStudentIds
+     * @param list<int> $newStudentIds
+     */
+    private function dispatchEnrollmentEvents(SchoolClass $class, array $existingStudentIds, array $newStudentIds): void
+    {
+        // Find newly added students
+        $newlyEnrolledIds = array_diff($newStudentIds, $existingStudentIds);
+
+        if (empty($newlyEnrolledIds)) {
+            return;
+        }
+
+        // Load users and dispatch events
+        $newlyEnrolledUsers = User::whereIn('id', $newlyEnrolledIds)->get();
+
+        foreach ($newlyEnrolledUsers as $user) {
+            UserEnrolledInClass::dispatch($user, $class);
+        }
     }
 
     /**

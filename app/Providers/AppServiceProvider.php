@@ -6,6 +6,7 @@ use App\Models\Book;
 use App\Models\Chapter;
 use App\Models\ChapterContent;
 use App\Models\Course;
+use App\Models\FileMetadata;
 use App\Models\SchoolClass;
 use App\Models\User;
 use App\Models\UserContentProgress;
@@ -13,6 +14,7 @@ use App\Policies\BookPolicy;
 use App\Policies\ChapterContentPolicy;
 use App\Policies\ChapterPolicy;
 use App\Policies\CoursePolicy;
+use App\Policies\FilePolicy;
 use App\Policies\SchoolClassPolicy;
 use App\Policies\UserContentProgressPolicy;
 use App\Policies\UserPolicy;
@@ -48,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Chapter::class, ChapterPolicy::class);
         Gate::policy(ChapterContent::class, ChapterContentPolicy::class);
         Gate::policy(UserContentProgress::class, UserContentProgressPolicy::class);
+        Gate::policy(FileMetadata::class, FilePolicy::class);
 
         Gate::before(function (?User $user) {
             if ($user?->isAdmin()) {

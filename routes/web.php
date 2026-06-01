@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LearningSpaceController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'welcome'])->name('home');
@@ -53,6 +54,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // File routes
+    Route::get('/files/{file}/download', [FileController::class, 'download'])->name('files.download');
+    Route::get('/files/{file}/view', [FileController::class, 'view'])->name('files.view');
 });
 
 require __DIR__.'/auth.php';
