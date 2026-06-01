@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Élève — Lecteur · Sirae</title>
+<script>(function(){try{if(localStorage.getItem('sirae-theme')==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: {
+    colors: {
+      canvas:'var(--canvas)', surface:'var(--surface)', 'surface-2':'var(--surface-2)',
+      border:'var(--border)', 'border-strong':'var(--border-strong)',
+      ink:'var(--ink)', muted:'var(--muted)', faint:'var(--faint)',
+      accent:'var(--accent)', 'accent-hover':'var(--accent-hover)',
+      'accent-soft':'var(--accent-soft)', 'accent-ink':'var(--accent-ink)',
+      success:'var(--success)', 'success-soft':'var(--success-soft)', warning:'var(--warning)'
+    },
+    fontFamily: { sans:['Public Sans','system-ui','sans-serif'] },
+    borderRadius: { xl:'14px','2xl':'18px' },
+    boxShadow: { card:'var(--shadow-card)', soft:'var(--shadow-soft)' }
+  }}
+};
+</script>
+<link rel="stylesheet" href="assets/sirae.css">
+<style>
+  .lesson { transition: background .12s; }
+  .lesson.active { background: var(--accent-soft); }
+  .lesson .lesson-bar { height: 3px; background: var(--accent); border-radius: 99px; transition: width .4s; }
+  .lesson.done .stat { background: var(--success); color:#fff; border-color: transparent; }
+</style>
+</head>
+<body>
+<div class="h-screen flex flex-col overflow-hidden" data-screen-label="Élève · Lecteur vidéo">
+
+  <!-- Slim topbar -->
+  <header class="shrink-0 h-[60px] border-b border-border bg-surface flex items-center gap-3 px-4 sm:px-6">
+    <a href="Élève — Mes cours.html" class="btn btn-ghost btn-sm">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M11 6l-6 6 6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Mes cours
+    </a>
+    <div class="h-5 w-px bg-border mx-1"></div>
+    <div class="min-w-0">
+      <div class="text-[12px] text-faint leading-tight">Développement Web</div>
+      <div class="text-[14.5px] font-bold leading-tight truncate">Module 2 — JavaScript dans le navigateur</div>
+    </div>
+    <div class="ml-auto flex items-center gap-2">
+      <div class="hidden sm:flex items-center gap-2 mr-1">
+        <span class="text-[12.5px] text-muted">Cours</span>
+        <div class="track w-28"><i id="courseBar" style="width:62%"></i></div>
+        <span class="text-[12.5px] font-semibold tnum" id="coursePct">62%</span>
+      </div>
+      <button class="btn btn-ghost btn-icon" onclick="Sirae.toggleTheme()" aria-label="Thème">
+        <svg data-theme-sun viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke-linecap="round"/></svg>
+        <svg data-theme-moon viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5" hidden><path d="M21 12.8A8.5 8.5 0 1111.2 3a6.6 6.6 0 009.8 9.8z" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="flex-1 flex overflow-hidden">
+
+    <!-- ===== Player column ===== -->
+    <main class="flex-1 overflow-y-auto scroll-area min-w-0">
+      <div class="max-w-[860px] mx-auto px-4 sm:px-6 py-6">
+
+        <!-- Native video -->
+        <div class="card overflow-hidden bg-black">
+          <video id="player" class="w-full block aspect-video bg-black" controls preload="metadata"
+                 poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='9'/%3E">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Votre navigateur ne prend pas en charge la lecture vidéo.
+          </video>
+        </div>
+
+        <!-- Title + actions -->
+        <div class="mt-5 flex flex-wrap items-start gap-4">
+          <div class="flex-1 min-w-[220px]">
+            <div class="text-[12.5px] text-faint mb-1" id="vidEyebrow">Module 2 · Vidéo 2 sur 4</div>
+            <h1 class="text-[21px] font-extrabold leading-tight" id="vidTitle">Écouter les événements utilisateur</h1>
+            <div class="flex items-center gap-2 mt-2.5 text-[13px] text-muted">
+              <span class="avatar !w-6 !h-6 !text-[10px]" style="background:#3f6b8a">TL</span> Thomas Leroy
+              <span class="text-faint">·</span> <span class="tnum" id="vidDur">14:22</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-secondary btn-icon" id="prevBtn" onclick="goRel(-1)" aria-label="Précédent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M11 6l-6 6 6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="btn btn-primary" id="completeBtn" onclick="markComplete()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Marquer terminé
+            </button>
+            <button class="btn btn-secondary" id="nextBtn" onclick="goRel(1)">
+              Suivant
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Live progress -->
+        <div class="card p-4 mt-5">
+          <div class="flex items-center justify-between text-[13px] mb-2">
+            <span class="text-muted">Progression de cette vidéo</span>
+            <span class="font-semibold tnum" id="vidPct">0%</span>
+          </div>
+          <div class="track"><i id="vidBar" style="width:0%"></i></div>
+          <div class="flex items-center justify-between text-[12px] text-faint tnum mt-2">
+            <span id="curTime">00:00</span>
+            <span id="totTime">--:--</span>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="card p-5 mt-5">
+          <h3 class="text-[14px] font-bold mb-2">À propos de cette vidéo</h3>
+          <p class="text-[14px] text-muted leading-relaxed">Découvrez comment réagir aux interactions de l'utilisateur : <code class="px-1.5 py-0.5 rounded bg-surface-2 text-[13px]">addEventListener</code>, propagation des événements, et délégation. À la fin, vous saurez câbler un formulaire dynamique sans recharger la page.</p>
+          <div class="mt-4 pt-4 border-t border-border flex items-center gap-3">
+            <a class="flex items-center gap-2.5 p-2.5 pr-4 rounded-xl border border-border hover:bg-surface-2 transition cursor-pointer">
+              <span class="w-8 h-10 rounded-md grid place-items-center text-white text-[8px] font-bold shrink-0" style="background:#c0392b">PDF</span>
+              <span class="text-[13px]"><span class="block font-semibold leading-tight">Support de cours</span><span class="block text-faint text-[12px] tnum">1,1 Mo</span></span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- ===== Playlist ===== -->
+    <aside class="w-[340px] shrink-0 border-l border-border bg-surface hidden lg:flex flex-col h-full">
+      <div class="shrink-0 px-5 py-4 border-b border-border">
+        <h2 class="text-[15px] font-bold">Contenu du cours</h2>
+        <p class="text-[12.5px] text-faint mt-0.5 tnum"><span id="doneCount">3</span> / 5 vidéos · 4 h 10</p>
+      </div>
+      <div class="flex-1 overflow-y-auto scroll-area py-2" id="playlist">
+
+        <!-- Module 1 -->
+        <div class="px-5 pt-3 pb-1.5 flex items-center gap-2">
+          <span class="text-[12px] font-bold uppercase tracking-wide text-faint">Module 1 · Fondamentaux</span>
+          <span class="ml-auto text-[11.5px] text-faint tnum">3/3</span>
+        </div>
+        <button class="lesson done w-full text-left px-5 py-3 flex gap-3 items-center hover:bg-surface-2"
+                data-id="l1" data-title="Structurer une page avec le HTML sémantique" data-eyebrow="Module 1 · Vidéo 1 sur 5" data-dur="04:12">
+          <span class="stat w-6 h-6 rounded-full border border-border grid place-items-center text-[11px] font-bold text-muted shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-3.5 h-3.5"><path d="M20 6L9 17l-5-5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-[13.5px] font-medium leading-snug truncate">Structurer une page (HTML sémantique)</span>
+            <span class="block text-[12px] text-faint tnum mt-0.5">Vidéo · 04:12</span>
+          </span>
+        </button>
+        <button class="lesson done w-full text-left px-5 py-3 flex gap-3 items-center hover:bg-surface-2"
+                data-id="l2" data-title="Le modèle de boîte et la mise en page" data-eyebrow="Module 1 · Vidéo 2 sur 5" data-dur="07:38">
+          <span class="stat w-6 h-6 rounded-full border border-border grid place-items-center text-[11px] font-bold text-muted shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-3.5 h-3.5"><path d="M20 6L9 17l-5-5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-[13.5px] font-medium leading-snug truncate">Le modèle de boîte et la mise en page</span>
+            <span class="block text-[12px] text-faint tnum mt-0.5">Vidéo · 07:38</span>
+          </span>
+        </button>
+        <button class="lesson done w-full text-left px-5 py-3 flex gap-3 items-center hover:bg-surface-2"
+                data-id="l3" data-title="Flexbox : aligner et distribuer" data-eyebrow="Module 1 · Vidéo 3 sur 5" data-dur="12:05">
+          <span class="stat w-6 h-6 rounded-full border border-border grid place-items-center text-[11px] font-bold text-muted shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-3.5 h-3.5"><path d="M20 6L9 17l-5-5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-[13.5px] font-medium leading-snug truncate">Flexbox : aligner et distribuer</span>
+            <span class="block text-[12px] text-faint tnum mt-0.5">Vidéo · 12:05</span>
+          </span>
+        </button>
+
+        <!-- Module 2 -->
+        <div class="px-5 pt-4 pb-1.5 flex items-center gap-2">
+          <span class="text-[12px] font-bold uppercase tracking-wide text-faint">Module 2 · JavaScript</span>
+          <span class="ml-auto text-[11.5px] text-faint tnum">1/2</span>
+        </div>
+        <button class="lesson done w-full text-left px-5 py-3 flex gap-3 items-center hover:bg-surface-2"
+                data-id="l4" data-title="Sélectionner et manipuler le DOM" data-eyebrow="Module 2 · Vidéo 1 sur 5" data-dur="09:51">
+          <span class="stat w-6 h-6 rounded-full border border-border grid place-items-center text-[11px] font-bold text-muted shrink-0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-3.5 h-3.5"><path d="M20 6L9 17l-5-5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="flex-1 min-w-0">
+            <span class="block text-[13.5px] font-medium leading-snug truncate">Sélectionner et manipuler le DOM</span>
+            <span class="block text-[12px] text-faint tnum mt-0.5">Vidéo · 09:51</span>
+          </span>
+        </button>
+        <div class="lesson active px-5 py-3" data-id="l5" data-title="Écouter les événements utilisateur" data-eyebrow="Module 2 · Vidéo 2 sur 5" data-dur="14:22">
+          <button class="w-full text-left flex gap-3 items-center" onclick="setActive('l5')">
+            <span class="stat w-6 h-6 rounded-full bg-accent text-white grid place-items-center shrink-0">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3 ml-0.5"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+            <span class="flex-1 min-w-0">
+              <span class="block text-[13.5px] font-semibold leading-snug text-accent-ink">Écouter les événements utilisateur</span>
+              <span class="block text-[12px] text-accent-ink/70 tnum mt-0.5">En cours · 14:22</span>
+            </span>
+          </button>
+          <div class="track mt-2.5 ml-9" style="background:rgba(255,255,255,.35)"><i class="lesson-bar" data-bar="l5" style="width:48%"></i></div>
+        </div>
+
+      </div>
+      <div class="shrink-0 px-5 py-3 border-t border-border flex items-center gap-2 text-[12px] text-faint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Reprise automatique à votre dernière position
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  const player   = document.getElementById('player');
+  const vidBar   = document.getElementById('vidBar');
+  const vidPct   = document.getElementById('vidPct');
+  const curTime  = document.getElementById('curTime');
+  const totTime  = document.getElementById('totTime');
+  const order    = ['l1','l2','l3','l4','l5'];
+  const totalLessons = order.length;
+  let activeId   = 'l5';
+
+  // progression persistée (fraction 0..1) + terminé
+  const STORE = 'sirae-lecteur-v1';
+  let state = { progress: { l1:1, l2:1, l3:1, l4:1, l5:0.48 }, done: { l1:1, l2:1, l3:1, l4:1 } };
+  try { const s = JSON.parse(localStorage.getItem(STORE)); if (s && s.progress) state = s; } catch(e){}
+
+  function fmt(t){ if(!isFinite(t)) return '--:--'; const m=Math.floor(t/60), s=Math.floor(t%60); return (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+  function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+
+  function refreshLesson(id){
+    const el = document.querySelector('.lesson[data-id="'+id+'"]');
+    if(!el) return;
+    const bar = el.querySelector('[data-bar="'+id+'"]');
+    if(bar) bar.style.width = Math.round((state.progress[id]||0)*100)+'%';
+    if(state.done[id]) el.classList.add('done');
+  }
+  function refreshCourse(){
+    const pct = Math.round(Object.keys(state.done).filter(k=>state.done[k]).length / totalLessons * 100);
+    document.getElementById('courseBar').style.width = pct+'%';
+    document.getElementById('coursePct').textContent = pct+'%';
+    document.getElementById('doneCount').textContent = Object.keys(state.done).filter(k=>state.done[k]).length;
+  }
+
+  function setActive(id){
+    // retirer ancien actif visuel
+    document.querySelectorAll('.lesson').forEach(l=>{
+      l.classList.remove('active');
+      const wasActive = l.getAttribute('data-id')===activeId;
+    });
+    activeId = id;
+    const el = document.querySelector('.lesson[data-id="'+id+'"]');
+    el.classList.add('active');
+    document.getElementById('vidTitle').textContent   = el.dataset.title;
+    document.getElementById('vidEyebrow').textContent = el.dataset.eyebrow;
+    document.getElementById('vidDur').textContent     = el.dataset.dur;
+    // reprise : positionner la vidéo à la fraction stockée
+    const frac = state.progress[id] || 0;
+    const seek = () => { if(player.duration) player.currentTime = Math.min(frac,0.99)*player.duration; };
+    if(player.readyState>=1) seek(); else player.addEventListener('loadedmetadata', seek, {once:true});
+    updateLiveUI(frac);
+  }
+
+  function updateLiveUI(frac){
+    vidBar.style.width = Math.round(frac*100)+'%';
+    vidPct.textContent = Math.round(frac*100)+'%';
+  }
+
+  player.addEventListener('loadedmetadata', ()=> { totTime.textContent = fmt(player.duration); });
+  player.addEventListener('timeupdate', ()=>{
+    if(!player.duration) return;
+    const frac = player.currentTime / player.duration;
+    state.progress[activeId] = frac;
+    updateLiveUI(frac);
+    curTime.textContent = fmt(player.currentTime);
+    const bar = document.querySelector('[data-bar="'+activeId+'"]');
+    if(bar) bar.style.width = Math.round(frac*100)+'%';
+    save();
+  });
+  player.addEventListener('ended', markComplete);
+
+  function markComplete(){
+    state.done[activeId] = 1;
+    state.progress[activeId] = 1;
+    const el = document.querySelector('.lesson[data-id="'+activeId+'"]');
+    el.classList.add('done');
+    const stat = el.querySelector('.stat');
+    if(stat) stat.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-3.5 h-3.5"><path d="M20 6L9 17l-5-5" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    save(); refreshCourse();
+    goRel(1);
+  }
+  function goRel(d){
+    const i = order.indexOf(activeId);
+    const j = i + d;
+    if(j<0 || j>=order.length) return;
+    setActive(order[j]);
+    player.currentTime = (state.progress[order[j]]||0) * (player.duration||0);
+    player.play().catch(()=>{});
+  }
+
+  // init
+  order.forEach(refreshLesson);
+  refreshCourse();
+  setActive('l5');
+</script>
+</body>
+</html>

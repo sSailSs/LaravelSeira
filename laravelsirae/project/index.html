@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sirae — Templates</title>
+<script>(function(){try{if(localStorage.getItem('sirae-theme')==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: {
+    colors: {
+      canvas:'var(--canvas)', surface:'var(--surface)', 'surface-2':'var(--surface-2)',
+      border:'var(--border)', 'border-strong':'var(--border-strong)',
+      ink:'var(--ink)', muted:'var(--muted)', faint:'var(--faint)',
+      accent:'var(--accent)', 'accent-hover':'var(--accent-hover)',
+      'accent-soft':'var(--accent-soft)', 'accent-ink':'var(--accent-ink)',
+      success:'var(--success)', 'success-soft':'var(--success-soft)', warning:'var(--warning)'
+    },
+    fontFamily: { sans:['Public Sans','system-ui','sans-serif'] },
+    borderRadius: { xl:'14px','2xl':'18px' },
+    boxShadow: { card:'var(--shadow-card)', soft:'var(--shadow-soft)' }
+  }}
+};
+</script>
+<link rel="stylesheet" href="assets/sirae.css">
+</head>
+<body>
+<div class="min-h-screen">
+  <div class="max-w-[1080px] mx-auto px-5 sm:px-8 py-12 sm:py-16">
+
+    <!-- Header -->
+    <div class="flex items-center gap-3 mb-12">
+      <span class="w-10 h-10 rounded-xl bg-accent grid place-items-center text-white font-extrabold text-[17px]">S</span>
+      <div class="flex-1">
+        <div class="text-[18px] font-extrabold leading-tight">Sirae</div>
+        <div class="text-[13px] text-faint leading-tight">Plateforme e-learning · 4 templates</div>
+      </div>
+      <button class="btn btn-secondary btn-sm btn-icon" onclick="Sirae.toggleTheme()" aria-label="Thème">
+        <svg data-theme-sun viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke-linecap="round"/></svg>
+        <svg data-theme-moon viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5" hidden><path d="M21 12.8A8.5 8.5 0 1111.2 3a6.6 6.6 0 009.8 9.8z" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+
+    <h1 class="text-[34px] sm:text-[40px] font-extrabold leading-[1.08] tracking-tight max-w-[18ch]">Trois espaces, une expérience cohérente.</h1>
+    <p class="text-[16px] text-muted mt-4 max-w-[58ch] leading-relaxed">Maquettes haute-fidélité pour École, Formateur et Élève — pensées pour une transposition directe en Blade + Tailwind. Direction sobre et institutionnelle, accent terracotta, mode clair / sombre intégré.</p>
+
+    <!-- Templates -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-10">
+
+      <a href="École — Vue d'ensemble.html" class="card p-6 hover:shadow-soft hover:-translate-y-1 transition group">
+        <div class="flex items-center justify-between mb-5">
+          <span class="badge badge-accent">École</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5 text-faint group-hover:text-accent group-hover:translate-x-0.5 transition"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="text-[18px] font-bold">Vue d'ensemble</h2>
+        <p class="text-[13.5px] text-muted mt-1.5 leading-snug">Dashboard d'administration : KPIs, matières, classes, formateurs et activité de l'établissement.</p>
+      </a>
+
+      <a href="Formateur — Matière.html" class="card p-6 hover:shadow-soft hover:-translate-y-1 transition group">
+        <div class="flex items-center justify-between mb-5">
+          <span class="badge">Formateur</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5 text-faint group-hover:text-accent group-hover:translate-x-0.5 transition"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="text-[18px] font-bold">Gestion d'une matière</h2>
+        <p class="text-[13.5px] text-muted mt-1.5 leading-snug">Organisation des vidéos en séquence pédagogique par glisser-déposer, référentiel et attentes.</p>
+      </a>
+
+      <a href="Élève — Mes cours.html" class="card p-6 hover:shadow-soft hover:-translate-y-1 transition group">
+        <div class="flex items-center justify-between mb-5">
+          <span class="badge">Élève</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5 text-faint group-hover:text-accent group-hover:translate-x-0.5 transition"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="text-[18px] font-bold">Mes cours &amp; progression</h2>
+        <p class="text-[13.5px] text-muted mt-1.5 leading-snug">Classe attribuée, reprise du dernier contenu, progression globale et cartes de matières.</p>
+      </a>
+
+      <a href="Élève — Lecteur vidéo.html" class="card p-6 hover:shadow-soft hover:-translate-y-1 transition group">
+        <div class="flex items-center justify-between mb-5">
+          <span class="badge">Élève</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5 text-faint group-hover:text-accent group-hover:translate-x-0.5 transition"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h2 class="text-[18px] font-bold">Lecteur vidéo</h2>
+        <p class="text-[13.5px] text-muted mt-1.5 leading-snug">Player natif du navigateur, suivi de progression en temps réel, reprise automatique et playlist.</p>
+      </a>
+
+    </div>
+
+    <!-- Système -->
+    <div class="card p-6 mt-8">
+      <h3 class="text-[13px] font-bold uppercase tracking-wider text-faint mb-4">Système de design</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-5">
+        <div>
+          <div class="flex gap-1.5 mb-2">
+            <span class="w-7 h-7 rounded-lg" style="background:var(--accent)"></span>
+            <span class="w-7 h-7 rounded-lg" style="background:var(--accent-soft)"></span>
+            <span class="w-7 h-7 rounded-lg border border-border" style="background:var(--canvas)"></span>
+            <span class="w-7 h-7 rounded-lg" style="background:var(--ink)"></span>
+          </div>
+          <div class="text-[12.5px] text-muted">Terracotta + neutres chauds</div>
+        </div>
+        <div>
+          <div class="text-[20px] font-extrabold leading-none mb-1.5">Aa</div>
+          <div class="text-[12.5px] text-muted">Public Sans</div>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 mb-2"><div class="track w-16"><i style="width:65%"></i></div></div>
+          <div class="text-[12.5px] text-muted">Progression cohérente</div>
+        </div>
+        <div>
+          <div class="text-[13px] font-semibold mb-1.5">Clair / Sombre</div>
+          <div class="text-[12.5px] text-muted">Bascule intégrée</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

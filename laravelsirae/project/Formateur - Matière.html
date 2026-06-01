@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Formateur — Matière · Sirae</title>
+<script>(function(){try{if(localStorage.getItem('sirae-theme')==='dark')document.documentElement.classList.add('dark');}catch(e){}})();</script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: { extend: {
+    colors: {
+      canvas:'var(--canvas)', surface:'var(--surface)', 'surface-2':'var(--surface-2)',
+      border:'var(--border)', 'border-strong':'var(--border-strong)',
+      ink:'var(--ink)', muted:'var(--muted)', faint:'var(--faint)',
+      accent:'var(--accent)', 'accent-hover':'var(--accent-hover)',
+      'accent-soft':'var(--accent-soft)', 'accent-ink':'var(--accent-ink)',
+      success:'var(--success)', 'success-soft':'var(--success-soft)', warning:'var(--warning)'
+    },
+    fontFamily: { sans:['Public Sans','system-ui','sans-serif'] },
+    borderRadius: { xl:'14px','2xl':'18px' },
+    boxShadow: { card:'var(--shadow-card)', soft:'var(--shadow-soft)' }
+  }}
+};
+</script>
+<link rel="stylesheet" href="assets/sirae.css">
+<style>
+  .seq-item { transition: box-shadow .15s, border-color .15s, opacity .15s; }
+  .seq-item.dragging { opacity:.4; }
+  .seq-item.drop-target { border-color: var(--accent); box-shadow: 0 0 0 2px var(--ring); }
+  .handle { cursor: grab; }
+  .handle:active { cursor: grabbing; }
+</style>
+</head>
+<body>
+<div class="h-screen flex overflow-hidden" data-screen-label="Formateur · Matière">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar w-[264px] shrink-0 h-full flex flex-col" data-sidebar>
+    <div class="px-4 pt-4 pb-3">
+      <div class="flex items-center gap-3 p-2">
+        <span class="w-9 h-9 rounded-[11px] bg-accent grid place-items-center text-white font-extrabold text-[15px] shrink-0">S</span>
+        <span class="min-w-0 flex-1">
+          <span class="block text-[14.5px] font-bold leading-tight">Sirae</span>
+          <span class="block text-[12px] text-faint leading-tight">Espace formateur</span>
+        </span>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto scroll-area px-3 pb-3 space-y-5">
+      <div class="space-y-0.5">
+        <a class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+          Tableau de bord
+        </a>
+        <a class="nav-item active">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 5.5A1.5 1.5 0 015.5 4H11a2 2 0 012 2v14a1.5 1.5 0 00-1.5-1.5H4zM20 5.5A1.5 1.5 0 0018.5 4H13a2 2 0 00-2 2v14a1.5 1.5 0 011.5-1.5H20z"/></svg>
+          Mes matières <span class="ml-auto badge">3</span>
+        </a>
+        <a class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M7 21h10"/></svg>
+          Mes classes
+        </a>
+        <a class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 21v-1a5 5 0 015-5h0a5 5 0 015 5v1"/><circle cx="8" cy="7" r="3.2"/><path d="M16 14a4 4 0 013.8 2.8M15 7.5a3 3 0 100-1"/></svg>
+          Élèves
+        </a>
+        <a class="nav-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/></svg>
+          Fichiers
+        </a>
+      </div>
+      <div>
+        <p class="px-3 mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-faint">Mes matières</p>
+        <div class="space-y-0.5">
+          <a class="nav-item !text-ink" style="background:var(--surface-2)">
+            <span class="w-2 h-2 rounded-full" style="background:var(--accent)"></span> Développement Web
+          </a>
+          <a class="nav-item"><span class="w-2 h-2 rounded-full bg-faint"></span> Algorithmique</a>
+          <a class="nav-item"><span class="w-2 h-2 rounded-full bg-faint"></span> Bases de données</a>
+        </div>
+      </div>
+    </nav>
+    <div class="p-3 border-t border-border">
+      <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-surface-2 transition cursor-pointer">
+        <span class="avatar" style="background:#3f6b8a">TL</span>
+        <span class="min-w-0 flex-1">
+          <span class="block text-[13.5px] font-semibold leading-tight truncate">Thomas Leroy</span>
+          <span class="block text-[12px] text-faint leading-tight">Formateur</span>
+        </span>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-overlay" data-sidebar-overlay hidden onclick="Sirae.closeSidebar()"></div>
+
+  <!-- ============ MAIN ============ -->
+  <div class="flex-1 flex flex-col min-w-0 h-full">
+
+    <header class="shrink-0 h-[68px] border-b border-border bg-surface/80 backdrop-blur flex items-center gap-3 px-5 sm:px-7">
+      <button class="btn btn-ghost btn-icon btn-sm burger -ml-1" onclick="Sirae.toggleSidebar()" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+      <nav class="flex items-center gap-2 text-[13.5px] min-w-0">
+        <a class="text-muted hover:text-ink cursor-pointer">Mes matières</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 text-faint shrink-0"><path d="M9 18l6-6-6-6" stroke-width="2" stroke-linecap="round"/></svg>
+        <span class="font-semibold truncate">Développement Web</span>
+      </nav>
+      <div class="ml-auto flex items-center gap-2">
+        <button class="btn btn-ghost btn-icon" onclick="Sirae.toggleTheme()" aria-label="Thème">
+          <svg data-theme-sun viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19" stroke-linecap="round"/></svg>
+          <svg data-theme-moon viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5" hidden><path d="M21 12.8A8.5 8.5 0 1111.2 3a6.6 6.6 0 009.8 9.8z" stroke-linejoin="round"/></svg>
+        </button>
+        <a href="index.html" class="btn btn-ghost btn-icon" title="Tous les templates" aria-label="Accueil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5"><path d="M3 10.5L12 3l9 7.5M5 9.5V20h14V9.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto scroll-area">
+      <div class="max-w-[1180px] mx-auto px-5 sm:px-7 py-7">
+
+        <!-- Matière header -->
+        <div class="flex flex-wrap items-start gap-4 mb-6">
+          <span class="w-12 h-12 rounded-2xl grid place-items-center shrink-0" style="background:var(--accent-soft);color:var(--accent-ink)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-6 h-6" stroke-width="1.8"><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13.5 6l-3 12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <div class="flex-1 min-w-[240px]">
+            <h1 class="text-[24px] font-extrabold leading-tight">Développement Web</h1>
+            <div class="flex flex-wrap items-center gap-2 mt-2">
+              <span class="badge badge-accent">BTS SIO 1</span>
+              <span class="badge">BTS SIO 2</span>
+              <span class="badge">Bachelor Dev</span>
+              <span class="text-faint text-[13px]">·</span>
+              <span class="text-[13px] text-muted tnum">32 vidéos · 48 / 60 h publiées</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <a href="Élève — Lecteur vidéo.html" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+              Aperçu élève
+            </a>
+            <button class="btn btn-primary" onclick="openAdd()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14" stroke-width="2.2" stroke-linecap="round"/></svg>
+              Ajouter une vidéo
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 items-start">
+
+          <!-- Séquence pédagogique -->
+          <section class="xl:col-span-2 space-y-5">
+            <div class="flex items-center gap-3">
+              <h2 class="text-[16px] font-bold">Séquence pédagogique</h2>
+              <span class="text-[12.5px] text-faint">Glissez les vidéos pour réordonner</span>
+              <button class="ml-auto btn btn-ghost btn-sm">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 5v14M5 12h14" stroke-width="2.2" stroke-linecap="round"/></svg>
+                Module
+              </button>
+            </div>
+
+            <!-- Module 1 -->
+            <div class="card overflow-hidden">
+              <div class="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface-2/40">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 text-faint"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h3 class="font-bold text-[14.5px]">Module 1 — Fondamentaux HTML &amp; CSS</h3>
+                <span class="badge ml-1">5 vidéos</span>
+                <span class="ml-auto text-[12.5px] text-faint tnum">1 h 52</span>
+              </div>
+              <div class="p-2.5 space-y-1.5 seq-list" data-list="m1">
+                <!-- items injected style -->
+                <div class="seq-item flex items-center gap-3 p-2.5 rounded-xl border border-border bg-surface" draggable="true">
+                  <span class="handle text-faint shrink-0" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><circle cx="9" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+                  <span class="seq-num w-6 text-center font-bold text-[13px] text-faint tnum shrink-0">1</span>
+                  <span class="media-ph w-[68px] h-[40px] rounded-lg shrink-0">04:12</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-[14px] leading-tight truncate">Structurer une page avec le HTML sémantique</div>
+                    <div class="text-[12px] text-faint">Vidéo · 4 min</div>
+                  </div>
+                  <span class="badge badge-success">Publié</span>
+                  <button class="btn btn-ghost btn-icon btn-sm" aria-label="Options"><svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+                </div>
+                <div class="seq-item flex items-center gap-3 p-2.5 rounded-xl border border-border bg-surface" draggable="true">
+                  <span class="handle text-faint shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><circle cx="9" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+                  <span class="seq-num w-6 text-center font-bold text-[13px] text-faint tnum shrink-0">2</span>
+                  <span class="media-ph w-[68px] h-[40px] rounded-lg shrink-0">07:38</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-[14px] leading-tight truncate">Le modèle de boîte et la mise en page</div>
+                    <div class="text-[12px] text-faint">Vidéo · 8 min</div>
+                  </div>
+                  <span class="badge badge-success">Publié</span>
+                  <button class="btn btn-ghost btn-icon btn-sm" aria-label="Options"><svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+                </div>
+                <div class="seq-item flex items-center gap-3 p-2.5 rounded-xl border border-border bg-surface" draggable="true">
+                  <span class="handle text-faint shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><circle cx="9" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+                  <span class="seq-num w-6 text-center font-bold text-[13px] text-faint tnum shrink-0">3</span>
+                  <span class="media-ph w-[68px] h-[40px] rounded-lg shrink-0">12:05</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-[14px] leading-tight truncate">Flexbox : aligner et distribuer</div>
+                    <div class="text-[12px] text-faint">Vidéo · 12 min</div>
+                  </div>
+                  <span class="badge"><span class="w-1.5 h-1.5 rounded-full bg-warning"></span>Brouillon</span>
+                  <button class="btn btn-ghost btn-icon btn-sm" aria-label="Options"><svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="card overflow-hidden">
+              <div class="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface-2/40">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 text-faint"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <h3 class="font-bold text-[14.5px]">Module 2 — JavaScript dans le navigateur</h3>
+                <span class="badge ml-1">4 vidéos</span>
+                <span class="ml-auto text-[12.5px] text-faint tnum">2 h 18</span>
+              </div>
+              <div class="p-2.5 space-y-1.5 seq-list" data-list="m2">
+                <div class="seq-item flex items-center gap-3 p-2.5 rounded-xl border border-border bg-surface" draggable="true">
+                  <span class="handle text-faint shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><circle cx="9" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+                  <span class="seq-num w-6 text-center font-bold text-[13px] text-faint tnum shrink-0">1</span>
+                  <span class="media-ph w-[68px] h-[40px] rounded-lg shrink-0">09:51</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-[14px] leading-tight truncate">Sélectionner et manipuler le DOM</div>
+                    <div class="text-[12px] text-faint">Vidéo · 10 min</div>
+                  </div>
+                  <span class="badge badge-success">Publié</span>
+                  <button class="btn btn-ghost btn-icon btn-sm" aria-label="Options"><svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+                </div>
+                <div class="seq-item flex items-center gap-3 p-2.5 rounded-xl border border-border bg-surface" draggable="true">
+                  <span class="handle text-faint shrink-0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4"><circle cx="9" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="9" cy="18" r="1.4" fill="currentColor" stroke="none"/><circle cx="15" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+                  <span class="seq-num w-6 text-center font-bold text-[13px] text-faint tnum shrink-0">2</span>
+                  <span class="media-ph w-[68px] h-[40px] rounded-lg shrink-0">14:22</span>
+                  <div class="flex-1 min-w-0">
+                    <div class="font-semibold text-[14px] leading-tight truncate">Écouter les événements utilisateur</div>
+                    <div class="text-[12px] text-faint">Vidéo · 14 min</div>
+                  </div>
+                  <span class="badge badge-success">Publié</span>
+                  <button class="btn btn-ghost btn-icon btn-sm" aria-label="Options"><svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Info panel -->
+          <aside class="space-y-5">
+            <section class="card p-5">
+              <h3 class="text-[14px] font-bold mb-3">Référentiel</h3>
+              <a class="flex items-center gap-3 p-3 rounded-xl border border-border hover:bg-surface-2 transition cursor-pointer">
+                <span class="w-9 h-11 rounded-md grid place-items-center text-white text-[9px] font-bold shrink-0" style="background:#c0392b">PDF</span>
+                <span class="min-w-0 flex-1">
+                  <span class="block text-[13.5px] font-semibold leading-tight truncate">Référentiel BTS SIO.pdf</span>
+                  <span class="block text-[12px] text-faint tnum">2,4 Mo · téléversé le 12/09</span>
+                </span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-4 h-4 text-faint shrink-0"><path d="M12 3v12M7 10l5 5 5-5M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+            </section>
+
+            <section class="card p-5">
+              <h3 class="text-[14px] font-bold mb-2.5">Attentes pédagogiques</h3>
+              <ul class="space-y-2 text-[13.5px] text-muted leading-snug">
+                <li class="flex gap-2"><span class="text-accent mt-0.5">•</span> Concevoir une interface responsive accessible</li>
+                <li class="flex gap-2"><span class="text-accent mt-0.5">•</span> Maîtriser les fondamentaux de JavaScript</li>
+                <li class="flex gap-2"><span class="text-accent mt-0.5">•</span> Manipuler le DOM et gérer les événements</li>
+              </ul>
+            </section>
+
+            <section class="card p-5">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="text-[14px] font-bold">Volume horaire</h3>
+                <span class="text-[13px] font-semibold tnum">48 / 60 h</span>
+              </div>
+              <div class="track"><i style="width:80%"></i></div>
+              <p class="text-[12.5px] text-faint mt-2">12 h de contenu restent à publier pour atteindre l'objectif.</p>
+            </section>
+
+            <section class="card p-5">
+              <h3 class="text-[14px] font-bold mb-3">Classes associées</h3>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2.5"><span class="w-7 h-7 rounded-lg bg-surface-2 border border-border grid place-items-center text-[11px] font-bold text-muted">S1</span><span class="text-[13.5px] flex-1">BTS SIO 1</span><span class="text-[12px] text-faint tnum">28</span></div>
+                <div class="flex items-center gap-2.5"><span class="w-7 h-7 rounded-lg bg-surface-2 border border-border grid place-items-center text-[11px] font-bold text-muted">S2</span><span class="text-[13.5px] flex-1">BTS SIO 2</span><span class="text-[12px] text-faint tnum">24</span></div>
+                <div class="flex items-center gap-2.5"><span class="w-7 h-7 rounded-lg bg-surface-2 border border-border grid place-items-center text-[11px] font-bold text-muted">BD</span><span class="text-[13.5px] flex-1">Bachelor Dev</span><span class="text-[12px] text-faint tnum">19</span></div>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- Ajouter une vidéo (modal) -->
+<div id="addModal" hidden class="fixed inset-0 z-[60] flex items-end sm:items-center justify-center p-0 sm:p-6">
+  <div class="absolute inset-0 bg-black/45" onclick="closeAdd()"></div>
+  <div class="relative card shadow-soft w-full sm:max-w-[480px] rounded-b-none sm:rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-[17px] font-bold">Ajouter une vidéo</h3>
+      <button class="btn btn-ghost btn-icon btn-sm" onclick="closeAdd()" aria-label="Fermer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-5 h-5"><path d="M6 6l12 12M18 6L6 18" stroke-width="2" stroke-linecap="round"/></svg></button>
+    </div>
+    <label class="block text-[13px] font-semibold mb-1.5">Titre</label>
+    <input class="w-full h-10 px-3 rounded-[10px] bg-surface border border-border-strong outline-none focus-ring text-[14px] mb-4" placeholder="Ex. Les promesses et l'asynchrone">
+    <label class="block text-[13px] font-semibold mb-1.5">Fichier vidéo</label>
+    <div class="border-2 border-dashed border-border-strong rounded-xl p-7 text-center text-muted mb-4 cursor-pointer hover:bg-surface-2 transition">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-7 h-7 mx-auto mb-2 text-faint"><path d="M12 16V4M7 9l5-5 5 5M4 20h16" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <p class="text-[13.5px]">Glissez un fichier MP4 ou <span class="text-accent-ink font-semibold">parcourez</span></p>
+      <p class="text-[12px] text-faint mt-1">MP4, max 100 Mo</p>
+    </div>
+    <div class="flex items-center gap-3 mb-5">
+      <div class="flex-1">
+        <label class="block text-[13px] font-semibold mb-1.5">Module</label>
+        <select class="w-full h-10 px-3 rounded-[10px] bg-surface border border-border-strong outline-none focus-ring text-[14px]">
+          <option>Module 1 — Fondamentaux HTML &amp; CSS</option>
+          <option>Module 2 — JavaScript dans le navigateur</option>
+        </select>
+      </div>
+      <div class="w-32">
+        <label class="block text-[13px] font-semibold mb-1.5">Accès</label>
+        <select class="w-full h-10 px-3 rounded-[10px] bg-surface border border-border-strong outline-none focus-ring text-[14px]">
+          <option>Classe</option><option>Privé</option><option>Public</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex justify-end gap-2">
+      <button class="btn btn-secondary" onclick="closeAdd()">Annuler</button>
+      <button class="btn btn-primary" onclick="closeAdd()">Téléverser</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  function openAdd(){ document.getElementById('addModal').hidden = false; }
+  function closeAdd(){ document.getElementById('addModal').hidden = true; }
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeAdd(); });
+
+  // ---- Drag & drop reorder (par liste) ----
+  let dragged = null;
+  function renumber(list){ list.querySelectorAll(':scope > .seq-item .seq-num').forEach((n,i)=> n.textContent = i+1); }
+  document.querySelectorAll('.seq-list').forEach(list => {
+    list.addEventListener('dragstart', e => {
+      const item = e.target.closest('.seq-item'); if(!item) return;
+      dragged = item; item.classList.add('dragging');
+    });
+    list.addEventListener('dragend', e => {
+      const item = e.target.closest('.seq-item'); if(item) item.classList.remove('dragging');
+      list.querySelectorAll('.seq-item').forEach(i=>i.classList.remove('drop-target'));
+      dragged = null;
+    });
+    list.addEventListener('dragover', e => {
+      e.preventDefault();
+      if(!dragged || dragged.parentElement !== list) return;
+      const after = [...list.querySelectorAll('.seq-item:not(.dragging)')].find(el => {
+        const r = el.getBoundingClientRect();
+        return e.clientY < r.top + r.height/2;
+      });
+      list.querySelectorAll('.seq-item').forEach(i=>i.classList.remove('drop-target'));
+      if(after){ after.classList.add('drop-target'); list.insertBefore(dragged, after); }
+      else { list.appendChild(dragged); }
+      renumber(list);
+    });
+  });
+</script>
+</body>
+</html>
