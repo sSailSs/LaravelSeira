@@ -190,23 +190,6 @@ PATCH /api/user_content_progresses/{progressId}
 
 ---
 
-## API Endpoints Tested
-
-| Method | Endpoint | Student | Teacher | Admin | Status |
-|--------|----------|---------|---------|-------|--------|
-| GET | `/api/school_classes` | ✅ | ✅ | ✅ | 200 |
-| GET | `/api/school_classes/{id}` | ✅* | ✅ | ✅ | 200/403 |
-| PATCH | `/api/school_classes/{id}` | ❌ | ⚠️ | ✅ | 403/200 |
-| GET | `/api/courses` | ✅ | ✅ | ✅ | 200 |
-| GET | `/api/courses/{id}` | ✅* | ✅ | ✅ | 200/403 |
-| POST | `/api/courses` | ❌ | ✅ | ✅ | 403/201 |
-| DELETE | `/api/courses/{id}` | ❌ | ⚠️ | ✅ | 403/204 |
-| GET | `/api/chapters/{id}` | ✅* | ✅ | ✅ | 200/403 |
-| GET | `/api/chapter_contents/{id}` | ✅* | ✅ | ✅ | 200/403 |
-| POST | `/api/user_content_progresses` | ✅ | ✅ | ✅ | 201 |
-| GET | `/api/user_content_progresses/{id}` | ✅* | ✅ | ✅ | 200/403 |
-| PATCH | `/api/user_content_progresses/{id}` | ✅* | ✅ | ✅ | 200/403 |
-
 **Legend:**
 - ✅ Full access
 - ⚠️ Limited access (own resources only)

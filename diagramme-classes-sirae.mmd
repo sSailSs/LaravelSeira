@@ -1,0 +1,111 @@
+classDiagram
+    direction LR
+
+    class User {
+        +int id
+        +string name
+        +string email
+        +string role
+        +isAdmin() bool
+        +isTeacher() bool
+        +isStudent() bool
+    }
+
+    class SchoolClass {
+        +int id
+        +string name
+        +string level
+        +string academic_year
+        +int teacher_id
+        +teacher()
+        +students()
+        +courses()
+    }
+
+    class Course {
+        +int id
+        +string title
+        +string description
+        +int school_class_id
+        +int teacher_id
+        +schoolClass()
+        +teacher()
+        +chapters()
+    }
+
+    class Chapter {
+        +int id
+        +string title
+        +int position
+        +int course_id
+        +course()
+        +contents()
+    }
+
+    class ChapterContent {
+        +int id
+        +string title
+        +string content
+        +string content_type
+        +string video_url
+        +int duration_seconds
+        +int position
+        +chapter()
+        +progressRecords()
+    }
+
+    class UserContentProgress {
+        +int id
+        +int user_id
+        +int chapter_content_id
+        +int progress_seconds
+        +bool is_completed
+        +datetime last_watched_at
+    }
+
+    class FileMetadata {
+        +int id
+        +string original_name
+        +string file_path
+        +string mime_type
+        +int file_size
+        +string access_level
+        +string category
+        +recordDownload()
+        +isPdf() bool
+    }
+
+    class Book {
+        +int id
+        +string isbn
+        +string title
+        +string author
+        +date publication_date
+    }
+
+    class SchoolClassProcessor {
+        +process()
+        -normalizeStudentIds()
+        -extractStudentId()
+    }
+
+    User "1" --> "0..*" Course : enseigne
+    User "1" --> "0..*" SchoolClass : professeur
+    User "0..*" -- "0..*" SchoolClass : eleves
+
+    SchoolClass "1" --> "0..*" Course : contient
+    Course "1" --> "0..*" Chapter : contient
+    Chapter "1" --> "0..*" ChapterContent : contient
+
+    User "1" --> "0..*" UserContentProgress : suit
+    ChapterContent "1" --> "0..*" UserContentProgress : progression
+
+    User "1" --> "0..*" FileMetadata : upload
+    SchoolClass "0..1" --> "0..*" FileMetadata : acces classe
+
+    FileMetadata ..> Course : fileable
+    FileMetadata ..> Chapter : fileable
+    FileMetadata ..> ChapterContent : fileable
+
+    SchoolClassProcessor ..> SchoolClass : traite
+    SchoolClassProcessor ..> User : inscrit

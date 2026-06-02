@@ -1,0 +1,164 @@
+@startuml
+left to right direction
+hide circle
+skinparam linetype ortho
+
+entity "USERS" as USERS {
+  * id : bigint <<PK>>
+  --
+  name : varchar
+  email : varchar <<UK>>
+  email_verified_at : timestamp nullable
+  password : varchar nullable
+  role : varchar
+  remember_token : varchar nullable
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "SCHOOL_CLASSES" as SCHOOL_CLASSES {
+  * id : bigint <<PK>>
+  --
+  name : varchar
+  level : varchar nullable
+  academic_year : varchar nullable
+  teacher_id : bigint nullable <<FK>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "CLASS_USER" as CLASS_USER {
+  * id : bigint <<PK>>
+  --
+  school_class_id : bigint <<FK>>
+  user_id : bigint <<FK>>
+  created_at : timestamp
+  updated_at : timestamp
+  unique(school_class_id, user_id)
+}
+
+entity "COURSES" as COURSES {
+  * id : bigint <<PK>>
+  --
+  title : varchar
+  description : text nullable
+  school_class_id : bigint <<FK>>
+  teacher_id : bigint nullable <<FK>>
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "CHAPTERS" as CHAPTERS {
+  * id : bigint <<PK>>
+  --
+  course_id : bigint <<FK>>
+  title : varchar
+  position : int
+  created_at : timestamp
+  updated_at : timestamp
+  unique(course_id, position)
+}
+
+entity "CHAPTER_CONTENTS" as CHAPTER_CONTENTS {
+  * id : bigint <<PK>>
+  --
+  chapter_id : bigint <<FK>>
+  title : varchar nullable
+  content : text
+  content_type : varchar
+  video_url : varchar nullable
+  duration_seconds : int nullable
+  position : int
+  created_at : timestamp
+  updated_at : timestamp
+  unique(chapter_id, position)
+}
+
+entity "USER_CONTENT_PROGRESS" as USER_CONTENT_PROGRESS {
+  * id : bigint <<PK>>
+  --
+  user_id : bigint <<FK>>
+  chapter_content_id : bigint <<FK>>
+  progress_seconds : int
+  is_completed : boolean
+  last_watched_at : timestamp nullable
+  created_at : timestamp
+  updated_at : timestamp
+  unique(user_id, chapter_content_id)
+}
+
+entity "FILE_METADATA" as FILE_METADATA {
+  * id : bigint <<PK>>
+  --
+  original_name : varchar
+  file_path : varchar
+  file_name : varchar
+  mime_type : varchar
+  file_size : bigint
+  uploaded_by : bigint nullable <<FK>>
+  fileable_type : varchar nullable
+  fileable_id : bigint nullable
+  access_level : varchar
+  accessible_to_class_id : bigint nullable <<FK>>
+  description : varchar nullable
+  category : varchar
+  download_count : int
+  last_downloaded_at : timestamp nullable
+  created_at : timestamp
+  updated_at : timestamp
+  deleted_at : timestamp nullable
+}
+
+entity "BOOKS" as BOOKS {
+  * id : bigint <<PK>>
+  --
+  isbn : varchar nullable
+  title : varchar
+  description : text nullable
+  author : varchar
+  publication_date : date nullable
+  created_at : timestamp
+  updated_at : timestamp
+}
+
+entity "PASSWORD_RESET_TOKENS" as PASSWORD_RESET_TOKENS {
+  * email : varchar <<PK>>
+  --
+  token : varchar
+  created_at : timestamp nullable
+}
+
+entity "SESSIONS" as SESSIONS {
+  * id : varchar <<PK>>
+  --
+  user_id : bigint nullable <<FK>>
+  ip_address : varchar nullable
+  user_agent : text nullable
+  payload : longtext
+  last_activity : int
+}
+
+USERS "0..1" -- "0..*" SCHOOL_CLASSES : teacher_id
+USERS "0..1" -- "0..*" COURSES : teacher_id
+
+USERS "1" -- "0..*" CLASS_USER : user_id
+SCHOOL_CLASSES "1" -- "0..*" CLASS_USER : school_class_id
+
+SCHOOL_CLASSES "1" -- "0..*" COURSES : school_class_id
+COURSES "1" -- "0..*" CHAPTERS : course_id
+CHAPTERS "1" -- "0..*" CHAPTER_CONTENTS : chapter_id
+
+USERS "1" -- "0..*" USER_CONTENT_PROGRESS : user_id
+CHAPTER_CONTENTS "1" -- "0..*" USER_CONTENT_PROGRESS : chapter_content_id
+
+USERS "0..1" -- "0..*" FILE_METADATA : uploaded_by
+SCHOOL_CLASSES "0..1" -- "0..*" FILE_METADATA : accessible_to_class_id
+
+USERS "0..1" -- "0..*" SESSIONS : user_id
+USERS "1" -- "0..1" PASSWORD_RESET_TOKENS : email
+
+COURSES "0..1" .. "0..*" FILE_METADATA : fileable
+CHAPTERS "0..1" .. "0..*" FILE_METADATA : fileable
+CHAPTER_CONTENTS "0..1" .. "0..*" FILE_METADATA : fileable
+
+@enduml

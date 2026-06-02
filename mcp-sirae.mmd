@@ -1,0 +1,126 @@
+erDiagram
+    direction LR
+
+    USERS {
+        bigint id PK
+        string name
+        string email UK
+        timestamp email_verified_at
+        string password
+        string role
+        string remember_token
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    SCHOOL_CLASSES {
+        bigint id PK
+        string name
+        string level
+        string academic_year
+        bigint teacher_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CLASS_USER {
+        bigint id PK
+        bigint school_class_id FK
+        bigint user_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    COURSES {
+        bigint id PK
+        string title
+        text description
+        bigint school_class_id FK
+        bigint teacher_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CHAPTERS {
+        bigint id PK
+        bigint course_id FK
+        string title
+        int position
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    CHAPTER_CONTENTS {
+        bigint id PK
+        bigint chapter_id FK
+        string title
+        text content
+        string content_type
+        string video_url
+        int duration_seconds
+        int position
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    USER_CONTENT_PROGRESS {
+        bigint id PK
+        bigint user_id FK
+        bigint chapter_content_id FK
+        int progress_seconds
+        boolean is_completed
+        timestamp last_watched_at
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    FILE_METADATA {
+        bigint id PK
+        string original_name
+        string file_path
+        string file_name
+        string mime_type
+        bigint file_size
+        bigint uploaded_by FK
+        string fileable_type
+        bigint fileable_id
+        string access_level
+        bigint accessible_to_class_id FK
+        string description
+        string category
+        int download_count
+        timestamp last_downloaded_at
+        timestamp created_at
+        timestamp updated_at
+        timestamp deleted_at
+    }
+
+    BOOKS {
+        bigint id PK
+        string isbn
+        string title
+        text description
+        string author
+        date publication_date
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    USERS ||--o{ SCHOOL_CLASSES : "enseigne"
+    USERS ||--o{ COURSES : "enseigne"
+    USERS ||--o{ CLASS_USER : "est inscrit"
+    SCHOOL_CLASSES ||--o{ CLASS_USER : "contient"
+
+    SCHOOL_CLASSES ||--o{ COURSES : "propose"
+    COURSES ||--o{ CHAPTERS : "contient"
+    CHAPTERS ||--o{ CHAPTER_CONTENTS : "contient"
+
+    USERS ||--o{ USER_CONTENT_PROGRESS : "suit"
+    CHAPTER_CONTENTS ||--o{ USER_CONTENT_PROGRESS : "est suivi"
+
+    USERS ||--o{ FILE_METADATA : "upload"
+    SCHOOL_CLASSES ||--o{ FILE_METADATA : "rend accessible"
+
+    COURSES ||--o{ FILE_METADATA : "fileable"
+    CHAPTERS ||--o{ FILE_METADATA : "fileable"
+    CHAPTER_CONTENTS ||--o{ FILE_METADATA : "fileable"
