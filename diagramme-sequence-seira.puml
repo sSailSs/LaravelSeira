@@ -1,0 +1,42 @@
+@startuml
+title Seira - Sequence simple : regarder une video
+
+actor "Eleve" as Student
+participant "Interface Seira" as UI
+participant "Controller" as Controller
+participant "Policy" as Policy
+participant "Modele Course" as Course
+participant "Modele ChapterContent" as Content
+database "Base de donnees" as DB
+
+Student -> UI : Se connecte
+UI -> Controller : Demande ses cours
+Controller -> DB : Recherche les classes de l'eleve
+DB --> Controller : Classes trouvees
+Controller -> Course : Recupere les cours accessibles
+Course -> DB : SELECT courses
+DB --> Course : Liste des cours
+Course --> Controller : Cours de l'eleve
+Controller --> UI : Affiche les cours
+
+Student -> UI : Ouvre un cours
+UI -> Controller : Demande le detail du cours
+Controller -> Policy : Verifie l'acces
+Policy --> Controller : Acces autorise
+Controller -> DB : Charge chapitres et contenus
+DB --> Controller : Donnees du cours
+Controller --> UI : Affiche le cours
+
+Student -> UI : Regarde une video
+UI -> Controller : Envoie la progression
+Controller -> Content : Verifie le contenu
+Content -> DB : Recherche le contenu video
+DB --> Content : Contenu trouve
+Content --> Controller : Contenu valide
+
+Controller -> DB : Enregistre progress_seconds
+DB --> Controller : Progression sauvegardee
+Controller --> UI : Retourne confirmation
+UI --> Student : Progression mise a jour
+
+@enduml

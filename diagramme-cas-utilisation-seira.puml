@@ -1,0 +1,56 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam actorStyle awesome
+
+actor "Administrateur" as Admin
+actor "Professeur" as Teacher
+actor "Eleve" as Student
+
+rectangle "Seira - Plateforme e-learning scolaire" {
+  usecase "Se connecter" as UC_Login
+  usecase "Gerer son profil" as UC_Profile
+
+  usecase "Gerer les utilisateurs" as UC_ManageUsers
+  usecase "Gerer les classes" as UC_ManageClasses
+  usecase "Consulter la plateforme" as UC_Supervise
+
+  usecase "Gerer ses classes" as UC_TeacherClasses
+  usecase "Gerer ses cours" as UC_TeacherCourses
+  usecase "Ajouter des contenus" as UC_AddContent
+  usecase "Suivre la progression\ndes eleves" as UC_ViewProgress
+
+  usecase "Consulter ses cours" as UC_ViewCourses
+  usecase "Lire les contenus" as UC_ReadContent
+  usecase "Regarder les videos" as UC_WatchVideo
+  usecase "Suivre sa progression" as UC_SaveProgress
+
+  usecase "Gerer les fichiers" as UC_Files
+}
+
+Admin --> UC_Login
+Teacher --> UC_Login
+Student --> UC_Login
+
+Admin --> UC_Profile
+Teacher --> UC_Profile
+Student --> UC_Profile
+
+Admin --> UC_ManageUsers
+Admin --> UC_ManageClasses
+Admin --> UC_Supervise
+Admin --> UC_Files
+
+Teacher --> UC_TeacherClasses
+Teacher --> UC_TeacherCourses
+Teacher --> UC_AddContent
+Teacher --> UC_ViewProgress
+Teacher --> UC_Files
+
+Student --> UC_ViewCourses
+Student --> UC_ReadContent
+Student --> UC_WatchVideo
+Student --> UC_SaveProgress
+Student --> UC_Files
+
+@enduml
