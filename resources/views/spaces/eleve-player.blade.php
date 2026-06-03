@@ -74,7 +74,7 @@ $videoPct = ($content->duration_seconds && $currentProg?->progress_seconds)
         {{-- Native video --}}
         <div class="card overflow-hidden bg-black">
           <video id="player" class="w-full block aspect-video bg-black" controls preload="metadata"
-                 src="{{ $content->video_url ?? '' }}">
+                 src="/videos/test.mp4">
             Votre navigateur ne prend pas en charge la lecture vidéo.
           </video>
         </div>
@@ -100,14 +100,6 @@ $videoPct = ($content->duration_seconds && $currentProg?->progress_seconds)
           <div class="flex items-center gap-2">
             <button class="btn btn-secondary btn-icon" id="prevBtn" onclick="navRel(-1)" aria-label="Précédent">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 12H5M11 6l-6 6 6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="btn btn-primary" id="completeBtn" onclick="markComplete()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20 6L9 17l-5-5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <span id="completeBtnLabel">Marquer terminé</span>
-            </button>
-            <button class="btn btn-secondary" id="nextBtn" onclick="navRel(1)">
-              Suivant
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
         </div>

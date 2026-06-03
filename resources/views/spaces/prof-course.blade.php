@@ -23,7 +23,7 @@ function siraieColor(string $name): string {
       <div class="flex items-center gap-3 p-2">
         <span class="w-9 h-9 rounded-[11px] bg-accent grid place-items-center text-white font-extrabold text-[15px] shrink-0">S</span>
         <span class="min-w-0 flex-1">
-          <span class="block text-[14.5px] font-bold leading-tight">Sirae</span>
+          <span class="block text-[14.5px] font-bold leading-tight">Monto</span>
           <span class="block text-[12px] text-faint leading-tight">Espace formateur</span>
         </span>
       </div>

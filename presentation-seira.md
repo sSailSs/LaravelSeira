@@ -241,11 +241,36 @@ style: |
 
 <!-- _class: cover -->
 
-# Seira
+# Monto
 
 Plateforme e-learning scolaire pour organiser les classes, publier des cours et suivre la progression des eleves.
 
 <span class="tag">Laravel / API Platform / Blade / DevOps</span>
+
+---
+
+# Sommaire
+
+<div class="grid-2">
+<div class="card compact">
+
+1. Presentation du projet
+2. Cadrage / organisation
+3. Conception fonctionnelle
+4. Architecture technique
+5. Base de donnees
+
+</div>
+<div class="card compact">
+
+6. Developpement
+7. Securite
+8. Tests
+9. Deploiement
+10. Bilan
+
+</div>
+</div>
 
 ---
 
@@ -274,7 +299,7 @@ Centraliser un environnement scolaire simple et coherent :
 
 # Objectifs de demonstration
 
-| Attendu | Reponse dans Seira |
+| Attendu | Reponse dans Monto |
 |---|---|
 | Application fonctionnelle | Espaces admin, prof et eleve |
 | Conception | Cas d'utilisation, sequence, classes, MPD |
