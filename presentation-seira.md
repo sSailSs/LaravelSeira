@@ -4,152 +4,285 @@ theme: default
 paginate: true
 size: 16:9
 style: |
+  :root {
+    --ink: #17211c;
+    --muted: #5b665f;
+    --line: #d7dfd9;
+    --paper: #fbfaf6;
+    --soft: #edf4ee;
+    --mint: #9fc7ad;
+    --leaf: #2f6f52;
+    --clay: #b7633f;
+    --gold: #d8a846;
+  }
   section {
+    background: var(--paper);
+    color: var(--ink);
     font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0;
+    padding: 44px 58px;
+  }
+  section::after {
+    color: var(--muted);
+    font-size: 18px;
   }
   h1 {
-    color: #8c3c1d;
+    color: var(--leaf);
+    font-size: 42px;
+    margin-bottom: 18px;
   }
   h2 {
-    color: #2a2520;
+    color: var(--ink);
+    font-size: 30px;
+    margin: 0 0 16px;
+  }
+  h3 {
+    color: var(--clay);
+    font-size: 22px;
+    margin: 14px 0 10px;
+  }
+  p, li {
+    font-size: 24px;
+    line-height: 1.32;
+  }
+  small {
+    color: var(--muted);
+  }
+  strong {
+    color: var(--leaf);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 20px;
+  }
+  th {
+    background: var(--leaf);
+    color: white;
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 9px 12px;
   }
   code {
-    font-size: 0.78em;
+    font-size: 0.9em;
   }
   pre {
     border-radius: 8px;
+    background: #17211c;
+    padding: 16px 18px;
+    overflow: hidden;
   }
-  table {
-    font-size: 0.78em;
+  pre code {
+    color: #f7fff8;
+    font-size: 19px;
+    line-height: 1.28;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .cover {
+    background:
+      linear-gradient(90deg, rgba(251,250,246,.94), rgba(251,250,246,.72)),
+      url("wireframe/school%20preview.png");
+    background-size: cover;
+    background-position: center;
+  }
+  .cover h1 {
+    font-size: 64px;
+    color: var(--leaf);
+    margin-top: 170px;
+  }
+  .cover p {
+    max-width: 760px;
+    color: var(--ink);
+  }
+  .tag {
+    display: inline-block;
+    color: white;
+    background: var(--clay);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px;
+    box-shadow: 0 10px 28px rgba(23,33,28,.08);
+  }
+  .card h3 {
+    margin-top: 0;
+  }
+  .metric {
+    font-size: 42px;
+    color: var(--clay);
+    font-weight: bold;
+    margin: 0;
+  }
+  .note {
+    background: var(--soft);
+    border-left: 7px solid var(--mint);
+    padding: 14px 18px;
+    border-radius: 8px;
+  }
+  .pdf-frame {
+    width: 100%;
+    height: 470px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+  }
+  .wire {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    max-height: 460px;
+    object-fit: contain;
+    background: white;
+  }
+  .schema-img {
+    display: block;
+    max-width: 100%;
+    max-height: 485px;
+    object-fit: contain;
+    margin: 0 auto;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+  }
+  .diagram {
+    display: grid;
+    gap: 14px;
+  }
+  .diagram-row {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    gap: 14px;
+    align-items: stretch;
+  }
+  .actor {
+    background: var(--leaf);
+    color: white;
+    border-radius: 8px;
+    padding: 14px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .uses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .usecase {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 9px 14px;
+    font-size: 18px;
+    box-shadow: 0 8px 18px rgba(23,33,28,.06);
+  }
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    align-items: center;
+  }
+  .step {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 13px;
+    min-height: 92px;
+    font-size: 18px;
+  }
+  .arrow {
+    color: var(--clay);
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+  }
+  .db {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .tablebox {
+    background: white;
+    border: 1px solid var(--line);
+    border-top: 7px solid var(--leaf);
+    border-radius: 8px;
+    padding: 12px;
+    min-height: 92px;
+    font-size: 17px;
+  }
+  .tablebox strong {
+    display: block;
+    margin-bottom: 6px;
+  }
+  .compact li {
+    font-size: 21px;
+    margin-bottom: 6px;
+  }
+  .small-code pre, pre.small-code {
+    font-size: 17px;
   }
 ---
+
+<!-- _class: cover -->
 
 # Seira
 
-## Plateforme e-learning scolaire
+Plateforme e-learning scolaire pour organiser les classes, publier des cours et suivre la progression des eleves.
 
-Projet Laravel / DevOps  
-Presentation de 20 a 30 minutes
-
----
-
-# Objectif de la presentation
-
-Montrer comment nous avons construit une plateforme scolaire complete :
-
-- un besoin fonctionnel clair,
-- une architecture Laravel structuree,
-- une base de donnees relationnelle,
-- des droits par role,
-- une API REST,
-- des tests automatises,
-- une logique de deploiement.
-
----
-
-# Plan
-
-1. Presentation du projet
-2. Cadrage / organisation
-3. Conception fonctionnelle
-4. Architecture technique
-5. Base de donnees
-6. Developpement
-7. Securite
-8. Tests
-9. Deploiement
-10. Bilan
+<span class="tag">Laravel / API Platform / Blade / DevOps</span>
 
 ---
 
 # 1. Presentation du projet
 
-## C'est quoi Seira ?
+## Le besoin
 
-Seira est une plateforme de gestion pedagogique pour un etablissement scolaire.
+Centraliser un environnement scolaire simple et coherent :
 
-Elle permet a trois profils de travailler dans un meme environnement :
+<div class="grid">
+<div class="card">
+<h3>Admin</h3>
+<p>Supervise les utilisateurs, les classes, les cours et les donnees.</p>
+</div>
+<div class="card">
+<h3>Professeur</h3>
+<p>Cree des cours, structure les chapitres et publie les contenus.</p>
+</div>
+<div class="card">
+<h3>Eleve</h3>
+<p>Consulte les cours de sa classe et reprend sa progression.</p>
+</div>
+</div>
 
-| Role | Besoin |
+---
+
+# Objectifs de demonstration
+
+| Attendu | Reponse dans Seira |
 |---|---|
-| Admin | Superviser la plateforme |
-| Professeur | Creer et organiser les cours |
-| Eleve | Consulter les cours et suivre sa progression |
+| Application fonctionnelle | Espaces admin, prof et eleve |
+| Conception | Cas d'utilisation, sequence, classes, MPD |
+| Architecture | Laravel, API Platform, policies, events |
+| Qualite | Tests API, tests RBAC, parcours complet |
+| DevOps | Migrations, seeders, build Vite, cache prod |
 
----
-
-# Probleme traite
-
-Avant une plateforme centralisee :
-
-- les supports sont disperses,
-- le suivi des eleves est manuel,
-- les videos et documents sont difficiles a organiser,
-- les roles ne sont pas toujours bien separes.
-
-Avec Seira :
-
-- tout est rattache a une classe,
-- les cours sont structures,
-- les droits sont controles,
-- la progression est sauvegardee.
-
----
-
-# Demonstration du domaine
-
-```text
-Classe : 6A
-  Cours : Mathematiques - 6A
-    Chapitre : Introduction
-      Contenu : Video de cours
-      Contenu : Evaluation rapide
-    Chapitre : Exercices
-      Contenu : Video de correction
-```
-
-Cette hierarchie se retrouve directement dans le code et la base de donnees.
-
----
-
-# Maquette : espace eleve
-
-```text
-+-------------------------------------------------------------+
-| Seira                         Mes cours        Profil       |
-+----------------------+--------------------------------------+
-| Progression globale  | Mathematiques - 6A                   |
-| 68 %                 | [Video] Introduction                 |
-|                      | [Texte] Exercices corriges           |
-| Mes classes          | [Video] Evaluation rapide            |
-| - 6A                 |                                      |
-| - Groupe soutien     | Francais - 6A                        |
-|                      | [Texte] Lecture                      |
-+----------------------+--------------------------------------+
-```
-
-Objectif : permettre a l'eleve de retrouver rapidement ses cours et sa progression.
-
----
-
-# Maquette : espace professeur
-
-```text
-+-------------------------------------------------------------+
-| Seira                   Mes matieres      Deconnexion        |
-+----------------------+--------------------------------------+
-| Classes              | Mathematiques - 6A                   |
-| - 6A                 |                                      |
-| - 5B                 | Sequence pedagogique                 |
-|                      |  Module : Introduction               |
-| Actions              |    1. Video de cours                 |
-| + Creer un cours     |    2. Evaluation rapide              |
-| + Ajouter fichier    |                                      |
-|                      |  [+ Ajouter une video] [+ Module]    |
-+----------------------+--------------------------------------+
-```
-
-Objectif : donner au professeur une vue claire pour organiser ses contenus.
+<div class="note">Fil conducteur : creer un cours, publier un contenu, l'ouvrir cote eleve, puis enregistrer la progression.</div>
 
 ---
 
@@ -157,86 +290,118 @@ Objectif : donner au professeur une vue claire pour organiser ses contenus.
 
 ## Perimetre realise
 
-- Authentification
-- Gestion des roles
-- Classes et inscriptions
-- Cours, chapitres et contenus
-- Progression eleve
-- Upload de fichiers
+<div class="grid-2 compact">
+<div class="card">
+
+- Authentification par session
+- Redirection vers l'espace du role
+- Gestion classes, cours, chapitres
+- Contenus texte et video
+- Suivi de progression
+
+</div>
+<div class="card">
+
 - API REST documentee
-- Policies de securite
-- Events / listeners
+- Upload et download de fichiers
+- Policies RBAC
+- Events et listeners
 - Tests automatises
+
+</div>
+</div>
 
 ---
 
-# Organisation technique
-
-Le projet est organise par responsabilites :
+# Organisation du code
 
 ```text
 app/
-  Models/        Entites Eloquent
+  Models/        Entites Eloquent exposees en API
   Policies/      Regles d'autorisation
   Events/        Evenements metier
   Listeners/     Reactions aux evenements
-  Observers/     Surveillance des modeles
-  State/         Logique API specifique
+  State/         Processors API Platform
   Http/
-    Controllers/ Controleurs web
+    Controllers/ Vues web Blade
 
 database/
-  migrations/    Structure SQL
-  seeders/       Donnees de demonstration
+  migrations/    Structure SQL versionnee
   factories/     Donnees de test
+  seeders/       Donnees de demonstration
 ```
+
+---
+
+# Methode de travail
+
+| Etape | Livrable |
+|---|---|
+| Analyse | brief fonctionnel, roles, parcours |
+| Conception | cas d'utilisation, classe, sequence, MPD |
+| Implementation | modeles, routes, API, vues, policies |
+| Verification | tests unitaires, API, parcours complet |
+| Livraison | build front, migrations, documentation |
+
+---
+
+# Choix et limites
+
+<div class="grid-2">
+<div class="card">
+<h3>Choix assumes</h3>
+
+- Blade + Tailwind pour rester proche de Laravel
+- API Platform pour exposer rapidement les ressources
+- Policies Laravel pour securiser chaque ressource
+- Events/listeners pour separer les effets metier
+
+</div>
+<div class="card">
+<h3>Points limites</h3>
+
+- Pas encore de vraie CI/CD
+- Notifications preparees mais pas industrialisees
+- Front fonctionnel, ameliorable en design system complet
+- Swagger a durcir en production
+
+</div>
+</div>
 
 ---
 
 # 3. Conception fonctionnelle
 
-## Cas d'utilisation principaux
+## Cas d'utilisation
 
-| Acteur | Cas d'utilisation |
-|---|---|
-| Admin | Gerer les utilisateurs, classes et cours |
-| Professeur | Creer un cours, ajouter chapitres et videos |
-| Eleve | Suivre un cours et enregistrer sa progression |
+<img class="schema-img" src="presentation-assets/cas-utilisation.png" />
 
-Le systeme est pense autour d'un parcours simple : creer, publier, consulter, progresser.
+<small>Source : `Cas Utilisation.pdf` / rendu depuis `diagramme-cas-utilisation-seira.puml`.</small>
 
 ---
 
-# Parcours eleve
+# Parcours principal
 
-```text
-Connexion
-  -> Espace eleve
-    -> Mes cours
-      -> Ouvrir un cours
-        -> Lire une video
-          -> Enregistrer la progression
-```
+## Scenario eleve
 
-Exemple concret :
+<img class="schema-img" src="presentation-assets/sequence.png" />
 
-Un eleve regarde 5 minutes sur une video de 10 minutes.  
-La progression est sauvegardee dans `user_content_progress`.
+<small>Source : `Sequence.pdf` / rendu depuis `diagramme-sequence-seira.puml`.</small>
 
 ---
 
-# Parcours professeur
+# Wireframes
 
-```text
-Connexion
-  -> Espace professeur
-    -> Mes matieres
-      -> Creer un cours
-        -> Ajouter un module
-          -> Ajouter une video
-```
-
-Le professeur gere la structure pedagogique sans manipuler directement la base.
+<div class="grid-2">
+<div>
+<h3>Espace eleve</h3>
+<img class="wire" src="wireframe/eleve%20mes%20cours.png" />
+</div>
+<div>
+<h3>Lecture video</h3>
+<img class="wire" src="wireframe/eleve%20lecture%20video.png" />
+</div>
+</div>
 
 ---
 
@@ -246,11 +411,11 @@ Le professeur gere la structure pedagogique sans manipuler directement la base.
 
 | Couche | Technologie |
 |---|---|
-| Backend | Laravel / PHP |
+| Backend | Laravel 12 / PHP |
+| API | API Platform Laravel |
 | ORM | Eloquent |
-| API | API Platform |
-| Front | Blade, Tailwind, Alpine.js |
-| Build front | Vite |
+| Front | Blade, TailwindCSS, Alpine.js |
+| Build | Vite |
 | Tests | PHPUnit |
 | Base | SQL via migrations Laravel |
 
@@ -259,530 +424,208 @@ Le professeur gere la structure pedagogique sans manipuler directement la base.
 # Architecture applicative
 
 ```text
-Utilisateur
+Navigateur
    |
    v
-Routes web / API
+Routes web / routes API
    |
-   v
-Controller ou API Platform
+   +--> Controllers Blade --> vues par role
    |
-   v
-Policy + Model Eloquent
-   |
-   v
-Base de donnees
+   +--> API Platform ------> ressources REST
+             |
+             v
+      Policies + Models Eloquent
+             |
+             v
+        Base de donnees
 ```
 
-En complement : observers, events et listeners pour les actions importantes.
+<div class="note">Les droits ne sont pas portes par l'interface : ils sont verifies dans Laravel.</div>
 
 ---
 
-# Schema : architecture Laravel
-
-```text
-                  +------------------+
-                  |   Navigateur     |
-                  +--------+---------+
-                           |
-                           v
-        +------------------+------------------+
-        | Routes web / routes API             |
-        +------------------+------------------+
-                           |
-             +-------------+-------------+
-             |                           |
-             v                           v
-   +-------------------+       +-------------------+
-   | Controllers Blade |       | API Platform      |
-   +---------+---------+       +---------+---------+
-             |                           |
-             +-------------+-------------+
-                           v
-                 +---------+---------+
-                 | Policies + Models |
-                 +---------+---------+
-                           |
-                           v
-                 +---------+---------+
-                 | Base de donnees   |
-                 +-------------------+
-```
-
-Ce schema montre la separation entre interface web, API, securite et persistance.
-
----
-
-# Exemple : inclusion des assets
-
-Dans le layout Sirae, les assets front sont charges avec Vite :
+# Routes et API
 
 ```php
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-```
+Route::middleware('auth')->group(function () {
+    Route::get('/space/admin', [LearningSpaceController::class, 'admin'])
+        ->middleware('role:admin');
 
-En developpement :
+    Route::get('/space/prof', [LearningSpaceController::class, 'prof'])
+        ->middleware('role:prof');
 
-```bash
-npm run dev
-```
-
-En production :
-
-```bash
-npm run build
-```
-
----
-
-# Exemple : routes web
-
-```php
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [HomeController::class, 'dashboard']);
-    Route::get('/space/admin', [LearningSpaceController::class, 'admin']);
-    Route::get('/space/prof', [LearningSpaceController::class, 'prof']);
-    Route::get('/space/eleve', [LearningSpaceController::class, 'eleve']);
+    Route::get('/space/eleve', [LearningSpaceController::class, 'eleve'])
+        ->middleware('role:eleve');
 });
 ```
 
-Ces routes permettent de separer les espaces selon les roles.
+API documentee :
+
+```text
+/api/users, /api/school_classes, /api/courses, /api/chapters,
+/api/chapter_contents, /api/user_content_progresses, /api/file_metadata
+```
 
 ---
 
-# Exemple : API REST
+# Events et listeners
 
-Les modeles sont exposes avec API Platform :
-
-```php
-#[ApiResource(operations: [
-    new GetCollection(),
-    new Post(rules: [
-        'title' => 'required|string|max:255',
-        'school_class_id' => 'required|integer|exists:school_classes,id',
-    ]),
-    new Get(),
-    new Patch(),
-    new Delete(),
-])]
-class Course extends Model
-{
-    // ...
-}
+```text
+Action utilisateur
+  -> Controller / Processor / Observer
+    -> Event metier
+      -> Listener
+        -> logs, statistiques, notifications futures
 ```
 
-L'API est documentee sur `/api/docs`.
-
----
-
-# Exemple : endpoint API
-
-Creation d'un cours via API :
-
-```http
-POST /api/courses
-Content-Type: application/json
-```
-
-```json
-{
-  "title": "Mathematiques - 6A",
-  "description": "Programme annuel de mathematiques",
-  "school_class_id": 1,
-  "teacher_id": 2
-}
-```
-
-La validation est portee par les regles declarees dans le modele.
+| Event | Role |
+|---|---|
+| `UserEnrolledInClass` | tracer une inscription |
+| `ContentProgressUpdated` | suivre la progression |
+| `CourseCreated` | reagir a une creation de cours |
+| `CourseCompleted` | preparer stats et notifications |
 
 ---
 
 # 5. Base de donnees
 
-## Tables principales
+## MPD
 
-```text
-users
-school_classes
-class_user
-courses
-chapters
-chapter_contents
-user_content_progress
-file_metadata
-books
-```
+<img class="schema-img" src="presentation-assets/mpd.png" />
 
-Les fichiers `mcp-sirae.mmd` et `mpd-sirae.puml` contiennent les schemas.
+<small>Source : `MPD.pdf` / rendu depuis `mpd-sirae.puml`.</small>
 
 ---
 
-# Schema : MCD simplifie
+# Schema de classes
 
-```text
-USER
-  | 0..*
-  | suit
-  v
-USER_CONTENT_PROGRESS
-  ^
-  | 0..*
-  |
-CHAPTER_CONTENT
-  ^
-  | 0..*
-CHAPTER
-  ^
-  | 0..*
-COURSE
-  ^
-  | 0..*
-SCHOOL_CLASS
-```
+<img class="schema-img" src="presentation-assets/classes.png" />
 
-Ce schema presente la logique metier avant le detail des tables physiques.
+<small>Source complete : `diagramme-classes-sirae.mmd`.</small>
 
 ---
 
-# Schema : MPD simplifie
+# Contraintes importantes
 
-```text
-USERS (id PK)
-  1 -------- 0..* COURSES (teacher_id FK)
-  1 -------- 0..* CLASS_USER (user_id FK)
-
-SCHOOL_CLASSES (id PK)
-  1 -------- 0..* COURSES (school_class_id FK)
-  1 -------- 0..* CLASS_USER (school_class_id FK)
-
-COURSES
-  1 -------- 0..* CHAPTERS
-
-CHAPTERS
-  1 -------- 0..* CHAPTER_CONTENTS
-
-CHAPTER_CONTENTS
-  1 -------- 0..* USER_CONTENT_PROGRESS
-```
-
-La version complete est dans `mpd-sirae.puml`.
-
----
-
-# Extrait de migration
-
-Creation de la table des cours :
-
-```php
-Schema::create('courses', function (Blueprint $table) {
-    $table->id();
-    $table->string('title');
-    $table->text('description')->nullable();
-    $table->foreignId('school_class_id')
-        ->constrained('school_classes')
-        ->cascadeOnDelete();
-    $table->foreignId('teacher_id')
-        ->nullable()
-        ->constrained('users')
-        ->nullOnDelete();
-    $table->timestamps();
-});
-```
-
----
-
-# Relations principales
-
-```text
-User 0..1 -> 0..* SchoolClass
-User 0..1 -> 0..* Course
-SchoolClass 1 -> 0..* Course
-Course 1 -> 0..* Chapter
-Chapter 1 -> 0..* ChapterContent
-User 1 -> 0..* UserContentProgress
-ChapterContent 1 -> 0..* UserContentProgress
-```
-
-Le MPD montre les cardinalites de chaque cote des relations.
-
----
-
-# Exemple : relation Eloquent
-
-Dans `Course`, un cours appartient a une classe et a un professeur :
-
-```php
-public function schoolClass(): BelongsTo
-{
-    return $this->belongsTo(SchoolClass::class);
-}
-
-public function teacher(): BelongsTo
-{
-    return $this->belongsTo(User::class, 'teacher_id');
-}
-
-public function chapters(): HasMany
-{
-    return $this->hasMany(Chapter::class);
-}
-```
-
----
-
-# Code : modele User
-
-Extrait de logique de role :
-
-```php
-public const ROLE_ADMIN = 'admin';
-public const ROLE_TEACHER = 'prof';
-public const ROLE_STUDENT = 'eleve';
-
-public function isAdmin(): bool
-{
-    return $this->hasRole(self::ROLE_ADMIN);
-}
-
-public function isTeacher(): bool
-{
-    return $this->hasRole(self::ROLE_TEACHER);
-}
-```
-
-Ce code est utilise par les policies et les middlewares.
-
----
-
-# Table pivot : classes et eleves
-
-La relation many-to-many passe par `class_user`.
-
-```php
-public function students(): BelongsToMany
-{
-    return $this->belongsToMany(
-        User::class,
-        'class_user',
-        'school_class_id',
-        'user_id'
-    )->withTimestamps();
-}
-```
-
-Contrainte importante :
-
-```php
-$table->unique(['school_class_id', 'user_id']);
-```
+| Table | Point cle |
+|---|---|
+| `class_user` | relation many-to-many eleves/classes |
+| `courses` | rattache un cours a une classe et un professeur |
+| `chapters` | ordre par `position` dans un cours |
+| `chapter_contents` | contenu texte ou video |
+| `user_content_progress` | unique par utilisateur + contenu |
+| `file_metadata` | fichier polymorphe + niveau d'acces |
 
 ---
 
 # 6. Developpement
 
-## Modeles developpes
+## Modeles principaux
 
-| Modele | Role |
-|---|---|
-| `User` | Utilisateur et role |
-| `SchoolClass` | Classe scolaire |
-| `Course` | Matiere / cours |
-| `Chapter` | Module ou chapitre |
-| `ChapterContent` | Texte ou video |
-| `UserContentProgress` | Suivi eleve |
-| `FileMetadata` | Fichiers uploades |
+<div class="grid">
+<div class="card">
+<p class="metric">3</p>
+<p>roles : admin, prof, eleve</p>
+</div>
+<div class="card">
+<p class="metric">5</p>
+<p>niveaux pedagogiques : classe, cours, chapitre, contenu, progression</p>
+</div>
+<div class="card">
+<p class="metric">REST</p>
+<p>ressources exposees via API Platform</p>
+</div>
+</div>
 
 ---
 
-# Exemple : suivi de progression
+# Exemple de code : modeles
 
 ```php
-class UserContentProgress extends Model
+class Course extends Model
 {
     protected $fillable = [
-        'user_id',
-        'chapter_content_id',
-        'progress_seconds',
-        'is_completed',
-        'last_watched_at',
+        'title',
+        'description',
+        'school_class_id',
+        'teacher_id',
     ];
 
-    protected $casts = [
-        'progress_seconds' => 'integer',
-        'is_completed' => 'boolean',
-        'last_watched_at' => 'datetime',
-    ];
+    public function schoolClass(): BelongsTo
+    {
+        return $this->belongsTo(SchoolClass::class);
+    }
+
+    public function chapters(): HasMany
+    {
+        return $this->hasMany(Chapter::class);
+    }
 }
 ```
 
 ---
 
-# Exemple : processor API
-
-Le processor synchronise les eleves d'une classe :
-
-```php
-if ($studentsProvided && $persisted instanceof SchoolClass) {
-    $newStudentIds = $this->normalizeStudentIds($studentsInput);
-    $persisted->students()->sync($newStudentIds);
-    $persisted->load('students');
-
-    $this->dispatchEnrollmentEvents(
-        $persisted,
-        $existingStudentIds,
-        $newStudentIds
-    );
-}
-```
-
-Ce code evite de stocker `students` comme une colonne SQL.
-
----
-
-# Code : validation API
-
-Exemple de validation pour un contenu de chapitre :
+# API : validation et synchronisation
 
 ```php
 new Post(rules: [
-    'chapter_id' => 'required|integer|exists:chapters,id',
-    'title' => 'nullable|string|max:255',
-    'content' => 'required|string',
-    'content_type' => 'sometimes|string|in:text,video',
-    'video_url' => 'nullable|required_if:content_type,video|url',
-    'duration_seconds' => 'nullable|required_if:content_type,video|integer|min:1',
-    'position' => 'sometimes|integer|min:1',
+    'title' => 'required|string|max:255',
+    'school_class_id' => 'required_without:schoolClass|integer',
+    'schoolClass' => ['required_without:school_class_id',
+        'regex:/^(\/api\/school_classes\/\d+|\d+)$/'],
 ])
 ```
 
-La validation empeche les contenus incomplets ou incoherents.
-
----
-
-# Gestion des fichiers
-
-Fonctionnalites :
-
-- validation des types,
-- taille maximale 100 MB,
-- niveau d'acces : prive, classe, public,
-- telechargement securise,
-- compteur de telechargement,
-- association a un cours, chapitre ou contenu.
-
 ```php
-public function recordDownload(): void
-{
-    $this->increment('download_count');
-    $this->update(['last_downloaded_at' => now()]);
-}
+$persisted->students()->sync($newStudentIds);
 ```
+
+<div class="note">Le processor synchronise les eleves dans la table pivot au lieu de stocker une liste dans une colonne.</div>
 
 ---
 
-# Maquette : gestion des fichiers
+# Fichiers et interface prof
 
-```text
-+-------------------------------------------------------------+
-| Fichiers pedagogiques                         [+ Upload]     |
-+----------------------+--------------+-----------+-----------+
-| Nom                  | Categorie    | Acces     | Actions   |
-+----------------------+--------------+-----------+-----------+
-| cours-fractions.pdf  | PDF          | Classe    | Voir      |
-| intro-video.mp4      | Video        | Classe    | Download  |
-| planning.png         | Image        | Public    | Voir      |
-+----------------------+--------------+-----------+-----------+
-```
+<div class="grid-2">
+<div class="compact">
 
-Chaque fichier possede des metadonnees, un niveau d'acces et un compteur de telechargements.
+- upload PDF, video, image, docx
+- taille maximale : 100 MB
+- acces : `private`, `class`, `public`
+- compteur de telechargements
+- association a un cours, chapitre ou contenu
 
----
-
-# Architecture evenementielle
-
-Quand une action importante arrive :
-
-```text
-Action utilisateur
-  -> Observer / Processor
-    -> Event
-      -> Listeners
-        -> Logs / Stats / Notifications
-```
-
-Evenements principaux :
-
-- `ContentProgressUpdated`
-- `UserEnrolledInClass`
-- `CourseCreated`
-- `CourseCompleted`
+</div>
+<div>
+<img class="wire" src="wireframe/prof%20matiere.png" />
+</div>
+</div>
 
 ---
 
-# Schema : events et listeners
+# Wireframes cote professeur
 
-```text
-Progression modifiee
-        |
-        v
-UserContentProgressObserver
-        |
-        v
-ContentProgressUpdated
-        |
-        +--------------------+
-        |                    |
-        v                    v
-LogProgressListener   UpdateStatisticsListener
-        |                    |
-        v                    v
-  logs Laravel          cache / statistiques
-```
-
-Avantage : on peut ajouter une notification sans modifier la logique principale.
-
----
-
-# Exemple : dispatch d'evenement
-
-```php
-foreach ($newlyEnrolledUsers as $user) {
-    UserEnrolledInClass::dispatch($user, $class);
-}
-```
-
-Interet :
-
-- separer la logique metier,
-- ajouter facilement des notifications,
-- tracer les actions,
-- calculer des statistiques.
+<div class="grid-2">
+<div>
+<h3>Tableau de bord</h3>
+<img class="wire" src="wireframe/prof%20tableau%20de%20bord.png" />
+</div>
+<div>
+<h3>Vue matiere</h3>
+<img class="wire" src="wireframe/prof%20matiere.png" />
+</div>
+</div>
 
 ---
 
 # 7. Securite
 
-## Controle par roles
-
-Roles utilises :
+## RBAC
 
 ```php
 public const ROLE_ADMIN = 'admin';
 public const ROLE_TEACHER = 'prof';
 public const ROLE_STUDENT = 'eleve';
-```
-
-Chaque role donne acces a un espace different.
-
----
-
-# Exemple : verification de role
-
-```php
-public function isTeacher(): bool
-{
-    return $this->hasRole(self::ROLE_TEACHER);
-}
 
 public function hasRole(string $role): bool
 {
@@ -791,13 +634,15 @@ public function hasRole(string $role): bool
 }
 ```
 
-Le code accepte aussi les variantes `teacher` et `student`.
+| Role | Acces |
+|---|---|
+| Admin | supervision globale |
+| Prof | ses classes, ses cours, ses contenus |
+| Eleve | ses cours et sa progression |
 
 ---
 
-# Exemple : policy
-
-Principe d'une policy :
+# Policies
 
 ```php
 public function create(User $user): bool
@@ -806,309 +651,163 @@ public function create(User $user): bool
 }
 ```
 
-Elle empeche par exemple un eleve de creer un cours ou d'uploader un fichier.
+<div class="grid-2 compact">
+<div class="card">
+<h3>Ce que ca protege</h3>
+
+- creation de cours
+- modification de classes
+- consultation de progression
+- acces aux fichiers
+
+</div>
+<div class="card">
+<h3>Ce que les tests verifient</h3>
+
+- 403 pour les actions interdites
+- filtrage selon la classe
+- professeur limite a ses ressources
+- admin avec bypass global
+
+</div>
+</div>
 
 ---
 
-# Code : controle d'acces fichier
+# Securite fichiers et production
 
-Principe applique dans la policy :
-
-```php
-if ($file->access_level === 'public') {
-    return true;
-}
-
-if ($file->uploaded_by === $user->id) {
-    return true;
-}
-
-if ($file->access_level === 'class') {
-    return $user->classes()
-        ->where('school_classes.id', $file->accessible_to_class_id)
-        ->exists();
-}
-```
-
-Le droit depend du role, du proprietaire et de l'appartenance a une classe.
-
----
-
-# Securite des fichiers
-
-Regles d'acces :
-
-| Niveau | Acces |
+| Sujet | Mesure |
 |---|---|
-| private | proprietaire ou admin |
-| class | utilisateurs de la classe |
-| public | utilisateurs autorises |
-
-Avant un telechargement, l'application verifie l'autorisation.
+| Fichiers prives | proprietaire ou admin |
+| Fichiers de classe | inscription dans la classe |
+| Fichiers publics | acces autorise |
+| API | policies sur les ressources |
+| Production | `API_REQUIRE_AUTH=true` possible |
+| Swagger | desactivation possible hors besoin |
 
 ---
 
 # 8. Tests
 
-## Strategie de test
+## Strategie
 
-Le projet contient :
+| Type | Objectif |
+|---|---|
+| Unitaires | relations Eloquent et logique metier |
+| Feature | routes, vues, uploads |
+| API | validation, CRUD, formats ID/IRI |
+| Securite | RBAC et 403 |
+| Integration | parcours utilisateur complet |
 
-- tests unitaires,
-- tests fonctionnels,
-- tests d'integration,
-- tests API,
-- tests de droits,
-- tests des events.
-
-Objectif : verifier a la fois la logique metier et la securite.
-
----
-
-# Exemple : test many-to-many
-
-```php
-public function test_school_class_students_many_to_many(): void
-{
-    $teacher = User::factory()->create(['role' => 'prof']);
-    $class = SchoolClass::factory()->create([
-        'teacher_id' => $teacher->id,
-    ]);
-
-    $students = User::factory()->count(3)
-        ->create(['role' => 'eleve']);
-
-    foreach ($students as $student) {
-        $class->students()->attach($student->id);
-    }
-
-$this->assertCount(3, $class->students);
-}
-```
-
----
-
-# Code : test du processor
-
-Le test verifie que `sync()` remplace les eleves au lieu de les ajouter en double :
-
-```php
-$class->students()->sync([$student1->id, $student2->id]);
-$this->assertCount(2, $class->students);
-
-$class->students()->sync([$student2->id, $student3->id]);
-$class->load('students');
-
-$this->assertFalse($class->students->contains($student1));
-$this->assertTrue($class->students->contains($student2));
-$this->assertTrue($class->students->contains($student3));
-```
-
-Ce test securise une regle importante de gestion de classe.
-
----
-
-# Exemple : test de securite
-
-```php
-$student = User::factory()->create(['role' => 'eleve']);
-
-$response = $this->actingAs($student)
-    ->post('/api/courses', [
-        'title' => 'Cours non autorise',
-    ]);
-
-$response->assertForbidden();
-```
-
-Ce type de test confirme que les permissions sont appliquees.
-
----
-
-# Parcours complet teste
-
-Scenario :
-
-```text
-Creer professeur
-Creer classe
-Inscrire eleve
-Creer cours
-Ajouter chapitres
-Ajouter contenus
-Mettre a jour progression
-Verifier droits admin/prof/eleve
-```
-
-Ce test valide le projet comme une application complete, pas seulement comme des modules separes.
-
----
-
-# Commandes de test
+Commandes :
 
 ```bash
 php artisan test
-```
-
-Tests plus cibles :
-
-```bash
-php artisan test tests/Unit/SchoolClassProcessorTest.php
-php artisan test tests/Feature/FileUploadTest.php
 php artisan test tests/Feature/CompleteUserJourneyTest.php
 ```
 
 ---
 
+# Parcours complet teste
+
+```text
+Admin cree professeur et classe
+Professeur cree cours, chapitres et contenus
+Admin inscrit Marie Dubois en 6A
+Eleve consulte le cours
+Eleve regarde 600s / 1200s
+Progression mise a jour
+Evenement ContentProgressUpdated emis
+Prof et admin consultent les progressions
+Autres eleves recoivent 403
+```
+
+<div class="note">Ce test prouve que les modules fonctionnent ensemble, pas seulement un par un.</div>
+
+---
+
 # 9. Deploiement
 
-## Preparation
+## Lancement local
 
 ```bash
 composer install
 npm install
 cp .env.example .env
 php artisan key:generate
+php artisan migrate --seed
+php artisan serve
+npm run dev
 ```
 
-Puis configurer :
+Points a configurer :
 
-- base de donnees,
-- stockage fichiers,
-- environnement,
-- cache,
-- URL de l'application.
+- base de donnees
+- stockage fichiers
+- URL applicative
+- mode API et Swagger
 
 ---
 
 # Mise en production
 
 ```bash
-php artisan migrate --force
-php artisan db:seed
+composer install --no-dev --optimize-autoloader
 npm run build
+php artisan migrate --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 ```
 
-Le build Vite est indispensable pour que Tailwind et le JavaScript soient servis correctement.
+<div class="note">Le build Vite est essentiel : sans lui, Tailwind et les composants front peuvent apparaitre casses.</div>
 
 ---
 
-# Point d'attention front
+# Points DevOps retenus
 
-Probleme rencontre :
+<div class="grid-2 compact">
+<div class="card">
+<h3>Fiabilite</h3>
 
-```text
-Page affichee sans style
-Icones enormes
-Formulaires non alignes
-```
+- migrations versionnees
+- seeders de demonstration
+- tests automatises
+- logs via events/listeners
 
-Cause :
+</div>
+<div class="card">
+<h3>Livraison</h3>
 
-```text
-Assets Vite/Tailwind non recompiles
-```
+- configuration separee dans `.env`
+- build front reproductible
+- caches Laravel
+- documentation API
 
-Solution :
-
-```bash
-npm run build
-```
-
----
-
-# Avant / apres compilation front
-
-```text
-Avant npm run build
-  - CSS absent ou ancien
-  - icones SVG trop grandes
-  - formulaires non alignes
-  - mise en page cassee
-
-Apres npm run build
-  - Tailwind regenere
-  - composants Sirae appliques
-  - layout lisible
-  - interface utilisable
-```
-
-C'est un exemple concret de probleme DevOps entre code source et livrable final.
-
----
-
-# Points DevOps du projet
-
-- migrations versionnees,
-- seeders de demonstration,
-- tests automatises,
-- documentation technique,
-- separation configuration/code,
-- build front reproductible,
-- logs et events,
-- architecture evolutive.
+</div>
+</div>
 
 ---
 
 # 10. Bilan
 
-## Points forts
+<div class="grid">
+<div class="card">
+<h3>Fonctionnel</h3>
+<p>Parcours clair pour admin, prof et eleve.</p>
+</div>
+<div class="card">
+<h3>Technique</h3>
+<p>Laravel structure, API REST, ORM, policies et events.</p>
+</div>
+<div class="card">
+<h3>Qualite</h3>
+<p>Tests coherents, documentation et logique de deploiement.</p>
+</div>
+</div>
 
-- projet complet et coherent,
-- separation claire des roles,
-- API REST operationnelle,
-- base de donnees structuree,
-- gestion de fichiers,
-- events et listeners,
-- tests significatifs,
-- documentation produite.
+Ameliorations possibles : statistiques avancees, notifications email, export des progressions, pipeline CI/CD, design system complet.
 
----
-
-# Difficultes rencontrees
-
-- synchronisation des eleves dans une classe,
-- gestion fine des permissions,
-- coherence entre API et vues Blade,
-- relation many-to-many,
-- suivi de progression,
-- build Vite/Tailwind,
-- tests d'integration.
-
-Chaque difficulte a amene une amelioration concrete du projet.
-
----
-
-# Ameliorations possibles
-
-- statistiques avancees pour les professeurs,
-- notifications email reelles,
-- export des progressions,
-- lecteur video plus complet,
-- pipeline CI/CD,
-- queue pour les listeners,
-- interface admin plus riche.
-
----
-
-# Conclusion
-
-Seira montre une application Laravel complete :
-
-- fonctionnelle,
-- securisee,
-- testee,
-- structuree,
-- documentee,
-- extensible.
-
-Le projet repond a un besoin concret : organiser et suivre l'apprentissage dans un cadre scolaire.
-
----
-
-# Questions
+## Questions
 
 Merci pour votre attention.
